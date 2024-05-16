@@ -14,7 +14,7 @@ export const createUser = async (newUser: Omit<IUser, '_id'>): Promise<IUser> =>
     if (!newUser.password) {
       throw new Error('Password is required');
     }
-    const hashedPassword = bcrypt.hash(newUser.password, 10);
+    const hashedPassword = await bcrypt.hash(newUser.password, 10);
 
     const newUserDoc = new User({ ...newUser, password: hashedPassword });
 
