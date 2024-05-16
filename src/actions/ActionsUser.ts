@@ -1,8 +1,8 @@
 // src/actions/ActionsUser.ts
 'use server';
 
-import { createUser } from '@/lib/userDbService';
-import { SignupSchema } from '@/lib/zodSchemas';
+import { createUser, getUser } from '@/lib/userDbService'; // Make sure to define getUser in userDbService
+import { SignupSchema, LoginSchema } from '@/lib/zodSchemas'; // Define LoginSchema in zodSchemas
 
 export async function signupUser(formData: FormData) {
   const rawFormData = {
@@ -27,4 +27,26 @@ export async function signupUser(formData: FormData) {
   await createUser(rawFormData);
 
   return { success: true, message: 'User created successfully!' };
+}
+
+export async function loginUser(formData: FormData) {
+  const rawFormData = {
+    username: String(formData.get('username')),
+    password: String(formData.get('password')),
+  };
+
+  const result = LoginSchema.safeParse(rawFormData); // Validate login data
+  if (!result.success) {
+    // Return validation errors as a user-friendly message
+    return { success: false, message: result.error.errors.map(e => e.message).join(', ') };
+  }
+
+  const user = await getUser(rawFormData.username); // Get user from database
+  if (!user || user.password !== rawFormData.password) {
+    // If user doesn't exist or password doesn't match, return an error
+    return { success: false, message: 'Invalid username or password' };
+  }
+
+  // If everything is okay, return a success message
+  return { success: true, message: 'Login successful!' };
 }

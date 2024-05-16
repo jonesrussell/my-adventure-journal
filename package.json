@@ -16,6 +16,7 @@
     "@radix-ui/react-progress": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
     "@typegoose/typegoose": "^12.4.0",
+    "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "dotenv": "^16.4.5",
@@ -38,6 +39,7 @@
   "devDependencies": {
     "@eslint/js": "^9.2.0",
     "@tanstack/eslint-plugin-query": "^5.35.6",
+    "@types/bcrypt": "^5.0.2",
     "@types/eslint": "^8.56.10",
     "@types/node": "^20.12.12",
     "@types/react": "^18",

@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 export interface IUser {
   username: string;
   email: string;
-  password: string;
+  password?: string;
 }
 
 const UserSchema = new mongoose.Schema<IUser>({
