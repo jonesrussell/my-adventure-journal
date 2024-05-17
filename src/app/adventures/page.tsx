@@ -1,24 +1,24 @@
-'use client';
-
+// src/app/adventures/page.tsx
 import React from 'react';
+import { IAdventurePlain } from '@/models/Adventure';
+import { fetchAdventures } from '@/lib/adventureDbService';
 import AdventuresList from './_components/AdventureList';
-import { useFetchAdventures } from '@/api/apiAdventures';
 
-const AdventuresPage = () => {
-  const { data: adventures, isLoading } = useFetchAdventures();
+const Page = async () => {
+  const adventures: IAdventurePlain[] = await fetchAdventures();
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-4">Adventures</h1>
-      {isLoading ? (
-        <div className="flex justify-center">
-          <div className="animate-spin rounded-full h-20 w-20 border-b-2 border-gray-900"></div>
-        </div>
-      ) : (
-        <AdventuresList adventures={adventures!} />
-      )}
-    </div>
+    <>
+      {/* Main content */}
+      <main className="container mx-auto px-4 py-8">
+        <section className="mb-8">
+          <h2 className="text-2xl font-bold mb-4">Adventures</h2>
+          <AdventuresList adventures={adventures} />{' '}
+          {/* Use AdventuresGrid for a grid layout */}
+        </section>
+      </main>
+    </>
   );
 };
 
-export default AdventuresPage;
+export default Page;
