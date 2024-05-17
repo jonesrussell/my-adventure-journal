@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { createAdventure } from '@/lib/adventureDatabaseService';
+import { createAdventure } from '@/lib/adventureDbService';
 
 const NewAdventurePage = () => {
   const [isUserInitialized, setIsUserInitialized] = useState(false);

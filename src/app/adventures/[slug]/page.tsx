@@ -1,7 +1,7 @@
 // src/app/pages/adventures/[slug]/page.tsx
 'use server';
 
-import { fetchAdventureById } from '@/lib/adventureDatabaseService';
+import { fetchAdventureById } from '@/lib/adventureDbService';
 import { IAdventurePlain } from '@/models/Adventure';
 import { disassembleSlug } from '@/utils/slug';
 

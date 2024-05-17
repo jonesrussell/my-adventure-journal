@@ -4,7 +4,7 @@ import AdventuresList from './adventures/_components/AdventureList';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
 import { IAdventurePlain } from '@/models/Adventure';
-import { fetchAdventures } from '../lib/adventureDatabaseService';
+import { fetchAdventures } from '@/lib/adventureDbService';
 
 const Home = async () => {
   const adventures: IAdventurePlain[] = await fetchAdventures();
