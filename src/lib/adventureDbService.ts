@@ -1,4 +1,4 @@
-// src/lib/adventureDatabaseService.ts
+// src/lib/adventureDbService.ts
 import connectToDatabase from '../utils/db';
 import Adventure, { IAdventurePlain } from '../models/Adventure';
 import { ObjectId } from 'mongodb';
@@ -50,7 +50,7 @@ export const fetchAdventures = async (): Promise<IAdventurePlain[]> => {
   }
 };
 
-// In adventureDatabaseService.ts or similar
+// In adventureDbService.ts or similar
 export async function fetchAdventureById(_id: string): Promise<IAdventurePlain | null> {
   try {
     await connectToDatabase();
