@@ -8,7 +8,7 @@ export const NavBar = () => {
       <NavLink href="#">About</NavLink>
       <NavLink href="/adventures">Adventures</NavLink>
       <NavLink href="#">Contact</NavLink>
-      <NavLink href="/login">Login</NavLink>
+      <NavLink href="/signin">Login</NavLink>
       <NavLink href="/signup">Signup</NavLink>
     </nav>
   );

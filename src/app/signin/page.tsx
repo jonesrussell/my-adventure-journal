@@ -1,8 +1,8 @@
-// src/app/login/page.tsx
+// src/app/signin/page.tsx
 'use client';
 
 import React, { useState, FormEvent } from 'react';
-import { loginUser } from '@/actions/ActionsUser'; // Make sure to define loginUser in ActionsUser.ts
+import { signinUser } from '@/actions/ActionsUser'; // Make sure to define signinUser in ActionsUser.ts
 
 export default function Page() {
   // Initialize state for errors and success
@@ -13,7 +13,7 @@ export default function Page() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     try {
-      const result = await loginUser(formData); // Use loginUser instead of signupUser
+      const result = await signinUser(formData); // Use signinUser instead of signupUser
       if (result.success) {
         setIsSuccessful(true);
       } else {

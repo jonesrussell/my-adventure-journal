@@ -1,12 +1,13 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, Model } from 'mongoose';
 
-export interface IUser {
+interface IUser extends Document {
   username: string;
   email: string;
+  hashedPassword: string;
   password?: string;
 }
 
-const UserSchema = new mongoose.Schema<IUser>({
+const UserSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
@@ -19,9 +20,19 @@ const UserSchema = new mongoose.Schema<IUser>({
     required: true,
     unique: true,
   },
+  hashedPassword: String,
   password: {
     type: String,
   },
 });
 
-export default mongoose.models.User || mongoose.model<IUser>('User', UserSchema);
+let UserModel: Model<IUser>;
+
+if (mongoose.models?.User) {
+  UserModel = mongoose.model('User') as Model<IUser>;
+} else {
+  UserModel = mongoose.model<IUser>('User', UserSchema);
+}
+
+export type { IUser };
+export { UserModel };

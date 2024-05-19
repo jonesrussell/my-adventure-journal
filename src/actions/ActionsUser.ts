@@ -2,7 +2,7 @@
 'use server';
 
 import { createUser, getUser } from '@/lib/userDbService'; // Make sure to define getUser in userDbService
-import { SignupSchema, LoginSchema } from '@/lib/zodSchemas'; // Define LoginSchema in zodSchemas
+import { SignInSchema, SignupSchema } from '@/lib/zod'; // Define LoginSchema in zodSchemas
 
 export async function signupUser(formData: FormData) {
   const rawFormData = {
@@ -24,25 +24,31 @@ export async function signupUser(formData: FormData) {
     return { success: false, message: 'Passwords do not match' };
   }
 
-  await createUser(rawFormData);
+  const newUser = {
+    username: rawFormData.username,
+    email: rawFormData.email,
+    password: rawFormData.password,
+  };
+
+  await createUser(newUser);
 
   return { success: true, message: 'User created successfully!' };
 }
 
-export async function loginUser(formData: FormData) {
+export async function signinUser(formData: FormData) {
   const rawFormData = {
     username: String(formData.get('username')),
     password: String(formData.get('password')),
   };
 
-  const result = LoginSchema.safeParse(rawFormData); // Validate login data
+  const result = SignInSchema.safeParse(rawFormData); // Validate signin data
   if (!result.success) {
     // Return validation errors as a user-friendly message
     return { success: false, message: result.error.errors.map(e => e.message).join(', ') };
   }
 
   const user = await getUser(rawFormData.username); // Get user from database
-  if (!user || user.password !== rawFormData.password) {
+  if (!user || user.hashedPassword !== rawFormData.password) {
     // If user doesn't exist or password doesn't match, return an error
     return { success: false, message: 'Invalid username or password' };
   }

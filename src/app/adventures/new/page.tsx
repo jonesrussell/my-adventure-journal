@@ -1,8 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import useAuth from '@/hooks/useAuth';
-import { redirect } from 'next/navigation';
+import React from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -20,20 +18,6 @@ import { Input } from '@/components/ui/input';
 import { createAdventure } from '@/lib/adventureDbService';
 
 const NewAdventurePage = () => {
-  const [isUserInitialized, setIsUserInitialized] = useState(false);
-  const user = useAuth();
-
-  useEffect(() => {
-    if (user !== null) {
-      setIsUserInitialized(true);
-      console.log(user);
-    }
-  }, [user]);
-
-  if (isUserInitialized && user === null) {
-    redirect('/login');
-  }
-
   const newAdventureSchema = z.object({
     name: z.string().min(8, {
       message: 'Adventer name must be at least 8 characters.',
@@ -71,7 +55,6 @@ const NewAdventurePage = () => {
 
   return (
     <>
-      <div>Welcome {user?.email} New Adventure page</div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField

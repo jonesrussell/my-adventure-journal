@@ -1,12 +1,10 @@
-// src/lib/userDatabaseService.ts
-import connectToDatabase from '../utils/db';
-import User, { IUser } from '../models/User';
+// src/lib/userDbService.ts
+import connectToDatabase from '@/utils/db';
+import { UserModel, IUser } from '@/models/User';
 import { ObjectId } from 'mongodb';
 import bcrypt from 'bcrypt';
 
-const UserModel = User;
-
-export const createUser = async (newUser: Omit<IUser, '_id'>): Promise<IUser> => {
+export const createUser = async (newUser: { username: string; email: string; password: string }): Promise<IUser> => {
   try {
     await connectToDatabase();
 
@@ -16,7 +14,7 @@ export const createUser = async (newUser: Omit<IUser, '_id'>): Promise<IUser> =>
     }
     const hashedPassword = await bcrypt.hash(newUser.password, 10);
 
-    const newUserDoc = new User({ ...newUser, password: hashedPassword });
+    const newUserDoc = new UserModel({ ...newUser, password: hashedPassword });
 
     const savedUser = await newUserDoc.save();
 
