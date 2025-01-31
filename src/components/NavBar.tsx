@@ -1,15 +1,22 @@
 import React from 'react';
-import { NavLink } from '@/components/NavLink';
+import Link from 'next/link';
+
+const navItems = [
+  { href: '#', label: 'About' },
+  { href: '/adventures', label: 'Adventures' },
+  { href: '#', label: 'Contact' },
+  { href: '/signin', label: 'Login' },
+  { href: '/signup', label: 'Signup' },
+];
 
 export const NavBar = () => {
   return (
     <nav className="space-x-4">
-      <NavLink href="/">Home</NavLink>
-      <NavLink href="#">About</NavLink>
-      <NavLink href="/adventures">Adventures</NavLink>
-      <NavLink href="#">Contact</NavLink>
-      <NavLink href="/signin">Login</NavLink>
-      <NavLink href="/signup">Signup</NavLink>
+      {navItems.map((item) => (
+        <Link key={item.label} href={item.href} className="text-gray-800 hover:text-blue-500">
+          {item.label}
+        </Link>
+      ))}
     </nav>
   );
 };
