@@ -1,0 +1,8 @@
+name: "Adventure Journal Rules"
+description: "Basic rules for the Adventure Journal application."
+rules:
+  - "Ensure all user inputs are validated."
+  - "Use environment variables for sensitive data."
+  - "Follow the project structure for components and pages." 
+
+  
