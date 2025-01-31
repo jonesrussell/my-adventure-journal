@@ -15,7 +15,14 @@ Before you begin, ensure you have the following installed on your machine:
    ```
 
 2. **Install Dependencies**
-   Use npm, yarn, or your preferred package manager to install the dependencies.
+   Use npm, yarn, or your preferred package manager to install the dependencies. The project uses the following key dependencies:
+   - **Next.js**: Framework for server-rendered React applications.
+   - **React**: JavaScript library for building user interfaces.
+   - **Mongoose**: MongoDB object modeling for Node.js.
+   - **Zod**: Type-safe schema validation.
+   - **Tailwind CSS**: Utility-first CSS framework for styling.
+
+   Install the dependencies:
    ```bash
    npm install
    # or

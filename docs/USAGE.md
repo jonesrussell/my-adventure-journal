@@ -25,3 +25,11 @@ The Adventure Journal application allows users to create, view, update, and dele
 ## User Authentication
 - Users can sign up and log in to manage their adventures.
 - Ensure to validate your inputs during sign-up and login processes.
+
+## Scripts
+The project includes several scripts defined in `package.json`:
+- **Development:** `npm run dev` - Starts the development server.
+- **Build:** `npm run build` - Builds the application for production.
+- **Start:** `npm run start` - Starts the production server.
+- **Lint:** `npm run lint` - Runs ESLint to check for code quality issues.
+- **Seed Database:** `npm run seed` - Seeds the database with initial data.
