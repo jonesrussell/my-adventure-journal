@@ -21,8 +21,8 @@ export async function getUserFromDb(email: string, hashedPassword: string): Prom
     const user = await UserModel.findOne({ email }).exec();
 
     // Check if the user was found and if the hashed password matches
-    if (user && user.hashedPassword === hashedPassword) {
-      return user;
+    if (user && (user as IUser).hashedPassword === hashedPassword) {
+      return user as Document<IUser>;
     }
 
     return null;
