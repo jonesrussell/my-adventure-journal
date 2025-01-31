@@ -3,7 +3,6 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { getUserFromDb } from '@/utils/db';
 import { IUser } from '@/models/User';
-import { ObjectId } from 'mongodb';
 
 interface User {
   id: string;
