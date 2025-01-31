@@ -1,34 +1,40 @@
 // src/auth.ts
 import NextAuth from 'next-auth';
-import Credentials from 'next-auth/providers/credentials';
-import { saltAndHashPassword } from '@/utils/password';
+import CredentialsProvider from 'next-auth/providers/credentials';
 import { getUserFromDb } from '@/utils/db';
 import { IUser } from '@/models/User';
+import { ObjectId } from 'mongodb';
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
-    Credentials({
+    CredentialsProvider({
+      name: 'Credentials',
       credentials: {
-        username: {},
-        password: {},
+        username: { label: "Username", type: "text" },
+        password: { label: "Password", type: "password" }
       },
-      authorize: async (credentials: Partial<Record<'username' | 'password', unknown>>) => {
-        if (typeof credentials.username !== 'string' || typeof credentials.password !== 'string') {
-          throw new Error('Invalid credentials.');
+      async authorize(credentials) {
+        if (!credentials) {
+          throw new Error('No credentials provided');
         }
 
-        const pwHash = saltAndHashPassword(credentials.password);
-        const userModel = await getUserFromDb(credentials.username, await pwHash);
-
-        if (!userModel) {
-          throw new Error('User not found.');
+        const user = await getUserFromDb(credentials.username, credentials.password);
+        if (user) {
+          return {
+            id: user.id.toString(),
+            name: user.name,
+            email: user.email,
+          };
+        } else {
+          return null;
         }
-
-        // Assuming userModel is already the document you want to work with
-        const userObject: IUser = userModel.toObject();
-
-        return userObject;
-      },
+      }
     }),
   ],
 });

@@ -1,7 +1,10 @@
 import mongoose, { Document, Model } from 'mongoose';
+import { ObjectId } from 'mongodb';
 
-interface IUser extends Document {
+export interface IUser {
+  id: ObjectId;
   username: string;
+  name: string;
   email: string;
   hashedPassword: string;
   password?: string;
@@ -34,5 +37,4 @@ if (mongoose.models?.User) {
   UserModel = mongoose.model<IUser>('User', UserSchema);
 }
 
-export type { IUser };
 export { UserModel };
