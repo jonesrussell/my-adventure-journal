@@ -1,8 +1,6 @@
-import mongoose, { Document, Schema } from 'mongoose';
-
 // Interface for plain JavaScript object
 export interface IAdventurePlain {
-  _id?: string; // Explicitly marked as optional
+  _id?: string; // Optional, as it may not be present when creating a new adventure
   name: string;
   location: string;
   description: string;

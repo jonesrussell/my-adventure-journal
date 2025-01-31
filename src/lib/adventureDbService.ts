@@ -1,27 +1,22 @@
 // src/lib/adventureDbService.ts
-import connectToDatabase from '../utils/db';
-import Adventure, { IAdventurePlain } from '../models/Adventure';
-import { ObjectId } from 'mongodb';
+import { PrismaClient } from '@prisma/client';
+import { IAdventurePlain } from '../models/Adventure';
 import { v4 as uuidv4 } from 'uuid';
 
-const AdventureModel = Adventure;
+const prisma = new PrismaClient();
 
 export const createAdventure = async (newAdventure: Omit<IAdventurePlain, '_id'>): Promise<IAdventurePlain> => {
   try {
-    await connectToDatabase();
-
-    // Basic validation can be performed here if needed
-    // For example, checking if the description length meets a minimum requirement
-
-    const newAdventureDoc = new Adventure({
-      ...newAdventure,
-      _id: uuidv4(), // Generate a unique ID for the new adventure
+    const savedAdventure = await prisma.adventure.create({
+      data: {
+        name: newAdventure.name,
+        location: newAdventure.location,
+        description: newAdventure.description,
+      },
     });
 
-    const savedAdventure = await newAdventureDoc.save();
-
     return {
-      _id: savedAdventure._id.toString(),
+      _id: savedAdventure.id, // Assuming id is a string
       name: savedAdventure.name,
       location: savedAdventure.location,
       description: savedAdventure.description,
@@ -34,12 +29,9 @@ export const createAdventure = async (newAdventure: Omit<IAdventurePlain, '_id'>
 
 export const fetchAdventures = async (): Promise<IAdventurePlain[]> => {
   try {
-    await connectToDatabase();
-
-    const adventures = await AdventureModel.find({}).exec();
-
+    const adventures = await prisma.adventure.findMany();
     return adventures.map(doc => ({
-      _id: doc._id as string,
+      _id: doc.id,
       name: doc.name,
       location: doc.location,
       description: doc.description,
@@ -50,26 +42,21 @@ export const fetchAdventures = async (): Promise<IAdventurePlain[]> => {
   }
 };
 
-// In adventureDbService.ts or similar
 export async function fetchAdventureById(_id: string): Promise<IAdventurePlain | null> {
   try {
-    await connectToDatabase();
-
-    const objectId = new ObjectId(_id);
-
-    const adventureDocument = await AdventureModel.findById(objectId).exec();
+    const adventureDocument = await prisma.adventure.findUnique({
+      where: { id: _id },
+    });
 
     if (!adventureDocument) {
       return null;
     }
 
-    const adventure = adventureDocument.toObject();
-
     return {
-      _id: adventure._id.toString(),
-      name: adventure.name,
-      location: adventure.location,
-      description: adventure.description,
+      _id: adventureDocument.id,
+      name: adventureDocument.name,
+      location: adventureDocument.location,
+      description: adventureDocument.description,
     } as IAdventurePlain;
   } catch (error) {
     console.error('Error fetching adventure by id:', error);
