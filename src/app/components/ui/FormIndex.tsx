@@ -4,25 +4,23 @@ import {
   useContext,
   useId,
   HTMLAttributes,
-  ComponentRef,
-  ComponentPropsWithoutRef,
   ReactNode,
   FC,
 } from 'react';
 import { JSX } from 'react';
-import * as LabelPrimitive from '@radix-ui/react-label';
-import { Slot } from '@radix-ui/react-slot';
 import {
   FieldValues,
   Control,
   FormProvider,
   FieldError,
+  UseFormReturn,
 } from 'react-hook-form';
 
 import { cn } from '@/utils/utils';
-import { Label } from '@/components/ui/label';
 import { NewAdventureFormValues } from '@/types/NewAdventureFormValues';
-import { useFormField } from './FormFieldContext'; // Ensure this path is correct
+import FormLabel from './FormLabel'; // Adjust the import path as necessary
+import FormControl from './FormControl'; // Adjust the import path as necessary
+import FormDescription from './FormDescription'; // Adjust the import path as necessary
 
 interface FormFieldProps<T extends FieldValues> {
   control: Control<T>;
@@ -82,62 +80,6 @@ const FormItem = forwardRef<
 });
 FormItem.displayName = 'FormItem';
 
-const FormLabel = forwardRef<
-  ComponentRef<typeof LabelPrimitive.Root>,
-  ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
->(({ className, ...props }, ref) => {
-  const { error, formItemId } = useFormField();
-
-  return (
-    <Label
-      ref={ref}
-      className={cn(error && 'text-destructive', className)}
-      htmlFor={formItemId}
-      {...props}
-    />
-  );
-});
-FormLabel.displayName = 'FormLabel';
-
-const FormControl = forwardRef<
-  ComponentRef<typeof Slot>,
-  ComponentPropsWithoutRef<typeof Slot>
->(({ ...props }, ref) => {
-  const { error, formItemId, formDescriptionId, formMessageId } = useFormField();
-
-  return (
-    <Slot
-      ref={ref}
-      id={formItemId}
-      aria-describedby={
-        !error
-          ? `${formDescriptionId}`
-          : `${formDescriptionId} ${formMessageId}`
-      }
-      aria-invalid={!!error}
-      {...props}
-    />
-  );
-});
-FormControl.displayName = 'FormControl';
-
-const FormDescription = forwardRef<
-  HTMLParagraphElement,
-  HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => {
-  const { formDescriptionId } = useFormField();
-
-  return (
-    <p
-      ref={ref}
-      id={formDescriptionId}
-      className={cn('text-sm text-muted-foreground', className)}
-      {...props}
-    />
-  );
-});
-FormDescription.displayName = 'FormDescription';
-
 const FormMessage: FC = () => {
   const { error, formMessageId } = useFormField();
 
@@ -157,16 +99,15 @@ const FormMessage: FC = () => {
 
 // Define the props for the Form component
 interface FormProps<T extends FieldValues> {
-  control: Control<T>;
-  handleSubmit: (onSubmit: (values: T) => void) => (event: React.FormEvent<HTMLFormElement>) => void;
+  formMethods: UseFormReturn<T>; // Change to UseFormReturn to include all methods
   children: ReactNode;
 }
 
 // Define the Form component
-const Form = <T extends FieldValues>({ control, handleSubmit, children }: FormProps<T>): JSX.Element => {
+const Form = <T extends FieldValues>({ formMethods, children }: FormProps<T>): JSX.Element => {
   return (
-    <FormProvider {...{ control }}>
-      <form onSubmit={handleSubmit((values: T) => {
+    <FormProvider {...formMethods}> {/* Pass the entire formMethods object */}
+      <form onSubmit={formMethods.handleSubmit((values: T) => {
         // Handle form submission here
         console.log(values);
       })}>
