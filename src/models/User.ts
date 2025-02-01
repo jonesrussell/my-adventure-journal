@@ -4,5 +4,5 @@ export interface IUser {
   name: string;
   email: string;
   hashedPassword: string;
-  password?: string;
+  password?: string | null;
 }

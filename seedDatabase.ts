@@ -1,79 +1,44 @@
-import mongoose from 'mongoose';
+import { PrismaClient } from '@prisma/client';
 import dotenv from 'dotenv';
-import Adventure, { IAdventurePlain } from './src/models/Adventure';
+import argon2 from 'argon2'; // Import argon2 for password hashing
 
 dotenv.config();
 
-async function connectToDatabase() {
-  const uri = process.env.MONGODB_URI || 'mongodb://db:27017/foo';
+const prisma = new PrismaClient();
 
-  try {
-    await mongoose.connect(uri, {});
-    console.log('Connected to MongoDB');
-  } catch (error) {
-    console.error('Failed to connect to MongoDB:', error);
-    throw error; // Re-throw the error after logging
-  }
+async function main() {
+  // Example: Create a new adventure
+  const adventure = await prisma.adventure.create({
+    data: {
+      name: 'Adventure Name',
+      location: 'Adventure Location',
+      description: 'Adventure Description',
+    },
+  });
+
+  console.log('Created adventure:', adventure);
+
+  // Hash the password before saving
+  const hashedPassword = await argon2.hash('securePassword'); // Hash the password
+
+  // Example: Create a new user
+  const user = await prisma.user.create({
+    data: {
+      username: 'exampleUser',
+      name: 'Example User',
+      email: 'example@example.com',
+      hashedPassword: hashedPassword, // Use hashedPassword instead of password
+    },
+  });
+
+  console.log('Created user:', user);
 }
 
-async function seedDatabase() {
-  const adventuresData: IAdventurePlain[] = [
-    {
-      name: 'Hiking in the Grand Canyon',
-      location: 'Grand Canyon, Arizona',
-      description: 'A challenging hike through one of the most iconic landscapes in the world, offering breathtaking views and a sense of accomplishment.'
-    },
-    {
-      name: 'Surfing in Hawaii',
-      location: 'North Shore, Oahu, Hawaii',
-      description: 'Catch the perfect wave on the North Shore of Oahu, known for its world-class surfing conditions and vibrant surf culture.'
-    },
-    {
-      name: 'Exploring the Pyramids of Giza',
-      location: 'Giza, Egypt',
-      description: 'Visit the ancient wonders of the world, including the Great Pyramid of Giza, and immerse yourself in the rich history of Egypt.'
-    },
-    {
-      name: 'Whitewater Rafting in Colorado',
-      location: 'Colorado River, Colorado',
-      description: 'Paddle through Class III and IV rapids on the Colorado River, surrounded by stunning mountain scenery and wildlife.'
-    },
-    {
-      name: 'Diving in the Great Barrier Reef',
-      location: 'Great Barrier Reef, Australia',
-      description: 'Discover the vibrant underwater world of the Great Barrier Reef, home to thousands of species of marine life and coral formations.'
-    },
-    {
-      name: 'Cycling the Camino de Santiago',
-      location: 'Spain',
-      description: 'Embark on a spiritual journey along the Camino de Santiago, a network of pilgrimages leading to the shrine of the apostle Saint James the Great in the cathedral of Santiago de Compostela in Galicia in northwestern Spain.'
-    }
-  ];
-
-  try {
-    const adventurePromises = adventuresData.map(adventureData => {
-      const adventure = new Adventure(adventureData);
-      return adventure.save(); // Returns a promise
-    });
-
-    // Wait for all promises to resolve
-    await Promise.all(adventurePromises);
-
-    console.log('Database has been seeded!');
-  } catch (error) {
-    console.error('Error seeding database:', error);
-  }
-}
-
-(async () => {
-  try {
-    await connectToDatabase();
-    await seedDatabase();
-    await mongoose.disconnect(); // Disconnect from MongoDB
-    console.log('Disconnected from MongoDB');
-  } catch (error) {
-    console.error('Unhandled promise rejection:', error);
-  }
-})().then(() => {
-  console.log('Database seeding completed successfully.');
-}).catch(error => console.error('Unhandled promise rejection:', error));
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

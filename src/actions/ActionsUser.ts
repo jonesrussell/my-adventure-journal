@@ -10,6 +10,7 @@ export async function signupUser(formData: FormData) {
     email: String(formData.get('email')),
     password: String(formData.get('password')),
     confirmPassword: String(formData.get('confirmPassword')),
+    name: String(formData.get('name')),
   };
 
   const result = SignupSchema.safeParse(rawFormData);
@@ -28,6 +29,7 @@ export async function signupUser(formData: FormData) {
     username: rawFormData.username,
     email: rawFormData.email,
     password: rawFormData.password,
+    name: rawFormData.name,
   };
 
   await createUser(newUser);

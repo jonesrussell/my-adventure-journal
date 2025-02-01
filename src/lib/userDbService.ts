@@ -1,24 +1,24 @@
 // src/lib/userDbService.ts
 import { PrismaClient } from '@prisma/client';
 import { IUser } from '@/models/User';
-import bcrypt from 'bcryptjs';
+import argon2 from 'argon2';
 
 const prisma = new PrismaClient();
 
-export const createUser = async (newUser: { username: string; email: string; password: string; name: string }): Promise<IUser> => {
+export const createUser = async ({ username, email, password, name }: { username: string; email: string; password: string; name: string; }): Promise<IUser> => {
   try {
     // Hash the password before storing it
-    if (!newUser.password) {
+    if (!password) {
       throw new Error('Password is required');
     }
-    const hashedPassword = await bcrypt.hash(newUser.password, 10);
+    const hashedPassword = await argon2.hash(password); // Hash the password
 
     const savedUser = await prisma.user.create({
       data: {
-        username: newUser.username,
-        email: newUser.email,
-        hashedPassword: hashedPassword,
-        name: newUser.name,
+        username,
+        email,
+        hashedPassword, // Store the hashed password
+        name, // Include the name
       },
     });
 
@@ -90,6 +90,7 @@ export async function getUser(username: string): Promise<IUser | null> {
       email: userDocument.email,
       name: userDocument.name,
       hashedPassword: userDocument.hashedPassword,
+      password: null, // Set password to null or omit it if not needed
     } as IUser;
   } catch (error) {
     console.error('Error fetching user by username:', error);
