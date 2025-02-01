@@ -1,10 +1,10 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { fetchAdventures } from '@/api/adventures';
-import { Adventure } from '@/models/Adventure'; // Import the Adventure type
+import { fetchAdventures } from '@/lib/adventureDbService';
+import { IAdventurePlain } from '@/models/Adventure'; // Use IAdventurePlain
 
 const AdventuresList: React.FC = () => {
-  const { data: adventures = [], isLoading, isError } = useQuery<Adventure[]>('adventures', fetchAdventures); // Specify the type here
+  const { data: adventures = [], isLoading, isError } = useQuery<IAdventurePlain[]>(['adventures'], fetchAdventures);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -16,16 +16,16 @@ const AdventuresList: React.FC = () => {
 
   return (
     <div>
-      {adventures.length > 0 ? ( // adventures is now an array
+      {adventures.length > 0 ? (
         <ul>
-          {adventures.map((adventure: Adventure) => ( // Specify the type for adventure
-            <li key={adventure.id}>{adventure.title}</li>
+          {adventures.map((adventure: IAdventurePlain) => (
+            <li key={adventure._id}>{adventure.name}</li>
           ))}
         </ul>
       ) : (
         <div className="text-center">
           <h2>No Adventures Found</h2>
-          <p>It looks like you haven&apos;t created any adventures yet.</p> {/* Escape the single quote */}
+          <p>It looks like you haven&apos;t created any adventures yet.</p>
           <button className="btn btn-primary" onClick={() => {/* Navigate to create adventure page */}}>
             Create Your First Adventure
           </button>

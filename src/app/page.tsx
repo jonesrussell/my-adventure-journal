@@ -1,8 +1,8 @@
 // src/app/page.tsx
 import React from 'react';
 import AdventuresList from './adventures/_components/AdventureList';
-import Hero from '@/components/Hero';
-import About from '@/components/About';
+import Hero from '@/components/ui/Hero';
+import About from '@/components/ui/About';
 import { IAdventurePlain } from '@/models/Adventure';
 import { fetchAdventures } from '@/lib/adventureDbService';
 

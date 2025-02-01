@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavBar } from '@/components/NavBar';
+import { NavBar } from '@/components/ui/NavBar';
 import Link from 'next/link';
 
 export const Header = () => {

@@ -6,20 +6,20 @@ import { SignInSchema, SignupSchema } from '@/utils/zod'; // Updated path to zod
 import { hashPassword, comparePasswords } from '@/utils/passwordUtils'; // Ensure this path is correct
 import { ZodSchema } from 'zod'; // Import ZodSchema
 
-// Define an interface for the form data
+// Define an interface for the sign-in form data
+interface SignInFormData {
+  username: string;
+  password: string;
+  email: string;
+}
+
+// Define an interface for the sign-up form data
 interface SignupFormData {
   username: string;
   email: string;
   password: string;
   confirmPassword: string;
   name: string;
-}
-
-// Define an interface for the sign-in form data
-interface SignInFormData {
-  username: string;
-  password: string;
-  email: string;
 }
 
 // Utility function to validate form data
@@ -40,7 +40,7 @@ function checkPasswordsMatch(password: string, confirmPassword: string) {
 }
 
 export async function signupUser(formData: FormData) {
-  const rawFormData = {
+  const rawFormData: SignupFormData = {
     username: String(formData.get('username')),
     email: String(formData.get('email')),
     password: String(formData.get('password')),
