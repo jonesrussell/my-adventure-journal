@@ -1,5 +1,14 @@
 name: "Adventure Journal Rules"
-description: "Basic rules for the Adventure Journal application."
+description:
+  - "Basic rules for the Adventure Journal application."
+  - "Use environment variables for sensitive data."
+  - "Use Next.js 15 features: app router, server actions, etc."
+  - "Use TypeScript."
+  - "Use Tailwind CSS for styling."
+  - "Use Shadcn UI for components."
+  - "Use React Hook Form for form handling."
+  - "Use React Query for data fetching."
+  - "Use React Hook Form for form handling."
 rules:
   - "Ensure all user inputs are validated."
   - "Use environment variables for sensitive data."
