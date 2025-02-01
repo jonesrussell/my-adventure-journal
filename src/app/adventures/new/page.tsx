@@ -1,18 +1,16 @@
 'use client';
 
 import { z } from 'zod';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler, UseFormReturn } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
-import { Form } from '@/components/ui/form';
 import {
   FormControl,
   FormDescription,
-  FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from '@/app/components/ui/FormIndex';
 import { Input } from '@/components/ui/input';
 import { createAdventure } from '@/lib/adventureDbService';
 import { FC } from 'react';
@@ -34,7 +32,7 @@ const NewAdventurePage: FC = (): JSX.Element => {
     }),
   });
 
-  const formMethods = useForm<NewAdventureFormValues>({
+  const formMethods: UseFormReturn<NewAdventureFormValues> = useForm<NewAdventureFormValues>({
     resolver: zodResolver(newAdventureSchema),
     defaultValues: {
       name: '',
@@ -54,49 +52,51 @@ const NewAdventurePage: FC = (): JSX.Element => {
 
   return (
     <Form formMethods={formMethods}>
-      <FormField
-        control={formMethods.control}
-        name="name"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Name</FormLabel>
-            <FormControl>
-              <Input placeholder="Type a name" {...field} />
-            </FormControl>
-            <FormDescription>Name for your Adventure</FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={formMethods.control}
-        name="location"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Location</FormLabel>
-            <FormControl>
-              <Input placeholder="Type a location" {...field} />
-            </FormControl>
-            <FormDescription>Location of your Adventure</FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={formMethods.control}
-        name="description"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Description</FormLabel>
-            <FormControl>
-              <Input placeholder="Describe your adventure" {...field} />
-            </FormControl>
-            <FormDescription>Description of your Adventure</FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <Button type="submit">Add New</Button>
+      <form onSubmit={formMethods.handleSubmit(onSubmit)}>
+        <FormField
+          control={formMethods.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Type a name" {...field} />
+              </FormControl>
+              <FormDescription>Name for your Adventure</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={formMethods.control}
+          name="location"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Location</FormLabel>
+              <FormControl>
+                <Input placeholder="Type a location" {...field} />
+              </FormControl>
+              <FormDescription>Location of your Adventure</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={formMethods.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Input placeholder="Describe your adventure" {...field} />
+              </FormControl>
+              <FormDescription>Description of your Adventure</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Add New</Button>
+      </form>
     </Form>
   );
 };

@@ -7,13 +7,13 @@ import {
   ComponentRef,
   ComponentPropsWithoutRef,
   ReactNode,
+  FC,
 } from 'react';
 import { JSX } from 'react';
 import * as LabelPrimitive from '@radix-ui/react-label';
 import { Slot } from '@radix-ui/react-slot';
 import {
   FieldValues,
-  useFormContext,
   Control,
   FormProvider,
   FieldError,
@@ -22,10 +22,11 @@ import {
 import { cn } from '@/utils/utils';
 import { Label } from '@/components/ui/label';
 import { NewAdventureFormValues } from '@/types/NewAdventureFormValues';
+import { useFormField } from './FormFieldContext'; // Ensure this path is correct
 
 interface FormFieldProps<T extends FieldValues> {
   control: Control<T>;
-  name: 'name' | 'location' | 'description';
+  name: keyof T; // Use keyof T to restrict to valid keys of the form values
   render: (props: { field: FieldValues }) => JSX.Element;
 }
 
@@ -40,42 +41,23 @@ const FormField = forwardRef<HTMLDivElement, FormFieldProps<NewAdventureFormValu
 );
 FormField.displayName = 'FormField';
 
-// Define the context value type
 interface FormFieldContextValue {
   name: string; // Add the name property
+  error?: FieldError; // Change to FieldError to allow access to message
+  formMessageId: string; // Add formMessageId property
+  formDescriptionId: string; // Add formDescriptionId property
+  formItemId: string; // Add formItemId property
 }
 
 // Create the context with the defined type
 const FormFieldContext = createContext<FormFieldContextValue | undefined>(undefined);
 
-const useFormField = (): {
-  id: string;
-  name: string;
-  formItemId: string;
-  formDescriptionId: string;
-  formMessageId: string;
-  error?: string; // Change to string
-} => {
-  const fieldContext = useContext(FormFieldContext);
-  const itemContext = useContext(FormItemContext);
-  const { getFieldState, formState } = useFormContext();
-
-  if (!fieldContext) {
-    throw new Error('useFormField should be used within <FormField>');
+const useFormField = (): FormFieldContextValue => {
+  const context = useContext(FormFieldContext);
+  if (!context) {
+    throw new Error('useFormField must be used within a FormFieldProvider');
   }
-
-  const fieldState = getFieldState(fieldContext.name, formState);
-  const { id } = itemContext;
-
-  return {
-    id,
-    name: fieldContext.name,
-    formItemId: `${id}-form-item`,
-    formDescriptionId: `${id}-form-item-description`,
-    formMessageId: `${id}-form-item-message`,
-    error: fieldState.error ? (fieldState.error as FieldError).message : undefined, // Ensure error is a string
-    ...fieldState,
-  };
+  return context;
 };
 
 interface FormItemContextValue {
@@ -156,29 +138,22 @@ const FormDescription = forwardRef<
 });
 FormDescription.displayName = 'FormDescription';
 
-const FormMessage = forwardRef<
-  HTMLParagraphElement,
-  HTMLAttributes<HTMLParagraphElement>
->(({ className, children, ...props }, ref) => {
+const FormMessage: FC = () => {
   const { error, formMessageId } = useFormField();
-  const body = error ? String(error?.message) : children;
+
+  // Access message directly from FieldError
+  const body = error ? error.message : null;
 
   if (!body) {
     return null;
   }
 
   return (
-    <p
-      ref={ref}
-      id={formMessageId}
-      className={cn('text-sm font-medium text-destructive', className)}
-      {...props}
-    >
+    <p id={formMessageId} className="text-sm font-medium text-destructive">
       {body}
     </p>
   );
-});
-FormMessage.displayName = 'FormMessage';
+};
 
 // Define the props for the Form component
 interface FormProps<T extends FieldValues> {
@@ -193,6 +168,7 @@ const Form = <T extends FieldValues>({ control, handleSubmit, children }: FormPr
     <FormProvider {...{ control }}>
       <form onSubmit={handleSubmit((values: T) => {
         // Handle form submission here
+        console.log(values);
       })}>
         {children}
       </form>
