@@ -1,6 +1,6 @@
 // Define the plain interface for Adventure
 export interface IAdventurePlain {
-  _id: string; // Ensure this matches Prisma's 'id'
+  _id?: string; // Ensure this matches Prisma's 'id'
   name: string;
   location: string; // This will be used for creating adventures
   description: string;
