@@ -21,6 +21,7 @@ const eslintConfig = [
         jsx: true,
         project: './tsconfig.eslint.json',
         projectService: true,
+        sourceType: 'module',
       },
       globals: {
         es2024: 'readonly',
@@ -28,8 +29,7 @@ const eslintConfig = [
       },
     },
     ignores: [
-      '.next',
-      'node_modules',
+      '.next/',
     ],
     plugins: {
       '@typescript-eslint': typescriptEslintPlugin,

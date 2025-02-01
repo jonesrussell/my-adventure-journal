@@ -2,7 +2,7 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "target": "ES2020",
+    "target": "ES2024",
     "lib": [
       "dom",
       "dom.iterable",
@@ -30,16 +30,19 @@
       ]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "eslint.config.js",
-    "types/*.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "next.config.mjs"
-  ],
+  // "include": [
+  //   "eslint.config.js",
+  //   "eslint.config.mjs",
+  //   "next-env.d.ts",
+  //   "next.config.mjs",
+  //   "postcss.config.mjs",
+  //   "seedDatabase.ts",
+  //   "src/**/*.ts",
+  //   "src/**/*.tsx",
+  //   "tailwind.config.ts",
+  //   "types/*.d.ts"
+  // ],
   "exclude": [
-    "node_modules"
+    ".next/*"
   ]
 }
