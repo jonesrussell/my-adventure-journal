@@ -1,13 +1,7 @@
 {
   "compilerOptions": {
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "target": "ES2024",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -25,30 +19,9 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     }
   },
-  // "include": [
-  //   "eslint.config.js",
-  //   "eslint.config.mjs",
-  //   "next-env.d.ts",
-  //   "next.config.mjs",
-  //   "postcss.config.mjs",
-  //   "seedDatabase.ts",
-  //   "src/**/*.ts",
-  //   "src/**/*.tsx",
-  //   "tailwind.config.ts",
-  //   "types/*.d.ts"
-  // ],
-  "exclude": [
-    ".next/*"
-  ],
-  "include": [
-    "next-env.d.ts",
-    ".next/types/**/*.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }
