@@ -1,7 +1,6 @@
 // src/lib/adventureDbService.ts
 import { PrismaClient } from '@prisma/client';
 import { IAdventurePlain } from '../models/Adventure';
-import { v4 as uuidv4 } from 'uuid';
 
 const prisma = new PrismaClient();
 
@@ -29,16 +28,29 @@ export const createAdventure = async (newAdventure: Omit<IAdventurePlain, '_id'>
 
 export const fetchAdventures = async (): Promise<IAdventurePlain[]> => {
   try {
-    const adventures = await prisma.adventure.findMany();
-    return adventures.map(doc => ({
-      _id: doc.id,
-      name: doc.name,
-      location: doc.location,
-      description: doc.description,
-    })) as IAdventurePlain[];
+    // Use the full URL for the fetch call
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/api/adventures`; // Ensure NEXT_PUBLIC_API_URL is set in your .env file
+    console.log('Fetching from URL:', url); // Log the URL for debugging
+
+    const response = await fetch(url);
+
+    // Check if the response is OK (status code 200-299)
+    if (!response.ok) {
+      const errorText = await response.text(); // Get the response text for debugging
+      throw new Error(`Error fetching adventures: ${response.status} ${response.statusText} - ${errorText}`);
+    }
+
+    const data = await response.json();
+
+    // Check if data is null or not an object
+    if (!data || typeof data !== 'object') {
+      throw new Error('Invalid data received from the API');
+    }
+
+    return data as IAdventurePlain[];
   } catch (error) {
     console.error('Error fetching adventures:', error);
-    throw error;
+    throw error; // Rethrow the error for further handling
   }
 };
 
@@ -49,7 +61,8 @@ export async function fetchAdventureById(_id: string): Promise<IAdventurePlain |
     });
 
     if (!adventureDocument) {
-      return null;
+      console.warn(`Adventure with id ${_id} not found`);
+      return null; // Return null if the adventure is not found
     }
 
     return {
@@ -60,6 +73,10 @@ export async function fetchAdventureById(_id: string): Promise<IAdventurePlain |
     } as IAdventurePlain;
   } catch (error) {
     console.error('Error fetching adventure by id:', error);
-    throw error;
+    throw error; // Rethrow the error for further handling
   }
 }
+
+// Use uuidv4 somewhere in your code
+// const newId = uuidv4();
+// Use newId as needed...

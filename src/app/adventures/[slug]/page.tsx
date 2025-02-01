@@ -1,29 +1,47 @@
 // src/app/pages/adventures/[slug]/page.tsx
-'use server';
+// Remove 'use client' directive to make this a server component
 
 import { fetchAdventureById } from '@/lib/adventureDbService';
 import { IAdventurePlain } from '@/models/Adventure';
 import { disassembleSlug } from '@/utils/slug';
+import { Metadata } from 'next'; // Import Metadata if needed
 
-export default async function Page({ params }: { params: { slug: string } }) {
-  const result = disassembleSlug(params.slug);
+// Define the component with params as a promise
+export default async function AdventurePage({
+  params,
+}: {
+  params: Promise<{ slug: string }>; // Define params as a promise
+}) {
+  const resolvedParams = await params; // Await the params to get the actual value
+  const result = disassembleSlug(resolvedParams.slug);
 
   if (!result || !result._id) {
-    // Handle the case where disassembleSlug returns null or no _id
-    return <div>Error loading adventure</div>; // Or any appropriate fallback UI
+    return <div>Invalid adventure slug</div>; // Handle invalid slug
   }
 
-  const { _id } = result;
+  try {
+    const fetchedAdventure: IAdventurePlain | null = await fetchAdventureById(result._id);
+    
+    // Check if fetchedAdventure is null
+    if (!fetchedAdventure) {
+      return <div>Adventure not found</div>; // Handle case where adventure is not found
+    }
 
-  const adventure: IAdventurePlain | null = await fetchAdventureById(_id);
+    return (
+      <div>
+        <h1>{fetchedAdventure.name}</h1>
+        <p>{fetchedAdventure.description}</p>
+        {/* Render other adventure details as needed */}
+      </div>
+    );
+  } catch (err) {
+    console.error(err);
+    return <div>Error loading adventure</div>; // Handle fetch error
+  }
+};
 
-  if (!adventure) return <div>Loading...</div>;
-
-  return (
-    <div>
-      <h1>{adventure.name}</h1>
-      <p>{adventure.description}</p>
-      {/* Render other adventure details as needed */}
-    </div>
-  );
-}
+// Optionally, you can define metadata for the page
+export const metadata: Metadata = {
+  title: 'Adventure Details',
+  description: 'Details about the selected adventure.',
+};

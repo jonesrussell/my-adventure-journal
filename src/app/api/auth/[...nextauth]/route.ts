@@ -1,35 +1,27 @@
-import NextAuth from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
+import NextAuth, { NextAuthConfig } from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
+import EmailProvider from 'next-auth/providers/nodemailer';
 
-const prisma = new PrismaClient();
-
-export const authOptions = {
+const authOptions: NextAuthConfig = {
   providers: [
-    CredentialsProvider({
-      name: 'Credentials',
-      credentials: {
-        username: { label: "Username", type: "text" },
-        password: { label: "Password", type: "password" }
-      },
-      async authorize(credentials) {
-        if (!credentials || !credentials.username || !credentials.password) {
-          throw new Error('No credentials provided');
-        }
-
-        const user = await prisma.user.findUnique({
-          where: { username: credentials.username },
-        });
-
-        if (user && (await bcrypt.compare(credentials.password, user.hashedPassword))) {
-          return { id: user.id, name: user.name, email: user.email };
-        } else {
-          return null;
-        }
-      }
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
+    EmailProvider({
+      server: {
+        host: process.env.EMAIL_SERVER_HOST,
+        port: parseInt(process.env.EMAIL_SERVER_PORT || '587', 10),
+        auth: {
+          user: process.env.EMAIL_SERVER_USER,
+          pass: process.env.EMAIL_SERVER_PASSWORD,
+        },
+      },
+      from: process.env.EMAIL_FROM, // The email address that will be used to send emails
+    }),
+    // Add other providers as needed
   ],
+  // Add any additional NextAuth options here
 };
 
-export default NextAuth(authOptions);
+export const { handlers: { GET, POST } } = NextAuth(authOptions)
