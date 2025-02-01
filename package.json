@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
+    "lintnext": "next lint .",
+    "lint": "eslint . --ignore-pattern '.next/'",
     "seed": "npx tsx seedDatabase.ts"
   },
   "dependencies": {
@@ -55,7 +56,8 @@
     "@typescript-eslint/parser": "^8.22.0",
     "aws-sdk": "^2.1692.0",
     "eslint": "^9.19.0",
-    "eslint-config-next": "^15.1.6",
+    "eslint-import-resolver-typescript": "^3.7.0",
+    "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-react": "^7.37.4",
     "globals": "^15.14.0",
     "mock-aws-s3": "^4.0.2",
