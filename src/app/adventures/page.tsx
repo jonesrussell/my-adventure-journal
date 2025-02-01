@@ -1,24 +1,30 @@
 // src/app/adventures/page.tsx
 import React from 'react';
-import { IAdventurePlain } from '@/models/Adventure';
+import { useQuery } from '@tanstack/react-query';
 import { fetchAdventures } from '@/lib/adventureDbService';
-import AdventuresList from './_components/AdventureList';
+import AdventureList from './_components/AdventureList';
+import { IAdventurePlain } from '@/models/Adventure';
 
-const Page = async () => {
-  const adventures: IAdventurePlain[] = await fetchAdventures();
+const AdventuresPage: React.FC = () => {
+  const { data: adventures = [], isLoading, isError } = useQuery<IAdventurePlain[], Error>(
+    ['adventures'],
+    fetchAdventures
+  );
+
+  if (isLoading) {
+    return <div>Loading adventures...</div>;
+  }
+
+  if (isError) {
+    return <div>Error loading adventures.</div>;
+  }
 
   return (
-    <>
-      {/* Main content */}
-      <main className="container mx-auto px-4 py-8">
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">Adventures</h2>
-          <AdventuresList adventures={adventures} />{' '}
-          {/* Use AdventuresGrid for a grid layout */}
-        </section>
-      </main>
-    </>
+    <div>
+      <h1>Adventures</h1>
+      <AdventureList adventures={adventures} />
+    </div>
   );
 };
 
-export default Page;
+export default AdventuresPage;
