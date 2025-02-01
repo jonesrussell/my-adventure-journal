@@ -1,6 +1,6 @@
-import React from 'react';
+import { FC } from 'react';
 
-const AboutPage: React.FC = () => {
+const AboutPage: FC = () => {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-4">About Us</h1>
