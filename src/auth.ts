@@ -2,7 +2,7 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs'; // Use bcryptjs
+import argon2 from 'argon2'; // Use argon2 instead of bcryptjs
 import { IUser } from '@/models/User';
 
 const prisma = new PrismaClient();
@@ -25,7 +25,7 @@ export const authOptions = {
         }) as IUser | null;
 
         if (user && typeof user.hashedPassword === 'string') {
-          const isPasswordValid = await bcrypt.compare(credentials.password as string, user.hashedPassword);
+          const isPasswordValid = await argon2.verify(user.hashedPassword, credentials.password as string); // Use argon2 for password verification
           if (isPasswordValid) {
             return { id: user.id, name: user.name, email: user.email };
           }
