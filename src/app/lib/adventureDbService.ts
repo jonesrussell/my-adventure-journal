@@ -4,18 +4,14 @@ import { IAdventurePlain } from '@/models/Adventure';
 
 const prisma = new PrismaClient();
 
-export async function createAdventure(data: { name: string; location: string; description: string }) {
+export const createAdventure = async (adventureData: IAdventurePlain): Promise<IAdventurePlain> => {
   const newAdventure = await prisma.adventure.create({
-    data: {
-      name: data.name,
-      location: data.location,
-      description: data.description,
-    },
+    data: adventureData,
   });
   return newAdventure; // This should return the full adventure object, including _id
-}
+};
 
-export const fetchAdventures = async () => {
+export const fetchAdventures = async (): Promise<IAdventurePlain[]> => {
   return await prisma.adventure.findMany();
 };
 

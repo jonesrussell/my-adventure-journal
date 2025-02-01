@@ -1,15 +1,16 @@
 // src/app/signup/page.tsx
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, FC } from 'react';
+import { JSX } from 'react';
 import { signupUser } from '@/actions/ActionsUser';
 
-export default function Page() {
+const SignUpPage: FC = (): JSX.Element => {
   // Initialize state for errors and success
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     try {
@@ -111,4 +112,6 @@ export default function Page() {
       </form>
     </div>
   );
-}
+};
+
+export default SignUpPage;

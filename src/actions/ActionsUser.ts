@@ -23,23 +23,23 @@ interface SignupFormData {
 }
 
 // Utility function to validate form data
-function validateFormData<T>(schema: ZodSchema<T>, data: T) {
+function validateFormData<T>(schema: ZodSchema<T>, data: T): { success: boolean; message: string } {
   const result = schema.safeParse(data);
   if (!result.success) {
     return { success: false, message: result.error.errors.map(e => e.message).join(', ') };
   }
-  return { success: true };
+  return { success: true, message: 'Validation successful' }; // Ensure message is always a string
 }
 
 // Utility function to check if passwords match
-function checkPasswordsMatch(password: string, confirmPassword: string) {
+function checkPasswordsMatch(password: string, confirmPassword: string): { success: boolean; message: string } {
   if (password !== confirmPassword) {
     return { success: false, message: 'Passwords do not match' };
   }
-  return { success: true };
+  return { success: true, message: 'Passwords match' }; // Ensure message is always a string
 }
 
-export async function signupUser(formData: FormData) {
+export async function signupUser(formData: FormData): Promise<{ success: boolean; message: string }> {
   const rawFormData: SignupFormData = {
     username: String(formData.get('username')),
     email: String(formData.get('email')),
@@ -51,7 +51,7 @@ export async function signupUser(formData: FormData) {
   // Validate signup data
   const validationResult = validateFormData(SignupSchema, rawFormData);
   if (!validationResult.success) {
-    return validationResult; // Return validation errors
+    return { success: false, message: validationResult.message }; // Ensure message is a string
   }
 
   // Check if passwords match
@@ -75,7 +75,7 @@ export async function signupUser(formData: FormData) {
   return { success: true, message: 'User created successfully!' };
 }
 
-export async function signinUser(formData: FormData) {
+export async function signinUser(formData: FormData): Promise<{ success: boolean; message: string }> {
   const rawFormData: SignInFormData = {
     username: String(formData.get('username')),
     password: String(formData.get('password')),

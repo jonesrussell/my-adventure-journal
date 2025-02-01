@@ -1,12 +1,13 @@
 // src/app/page.tsx
 
+import { JSX } from 'react';
 import AdventuresList from './adventures/_components/AdventureList';
 import Hero from '@/components/ui/Hero';
 import About from '@/components/ui/About';
 import { IAdventurePlain } from '@/models/Adventure';
 import { fetchAdventures } from '@/lib/adventureDbService';
 
-const Home = async () => {
+const Home = async (): Promise<JSX.Element> => {
   const adventures: IAdventurePlain[] = await fetchAdventures();
 
   return (

@@ -1,4 +1,6 @@
-const Hero = () => {
+import { JSX } from 'react';
+
+const Hero = (): JSX.Element => {
   return (
     <section
       className="relative"

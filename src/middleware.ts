@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
+export function middleware(request: NextRequest): NextResponse {
   // Example: Log the request URL (or any other logic)
   console.log('Request URL:', request.url);
 

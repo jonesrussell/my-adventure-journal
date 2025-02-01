@@ -1,4 +1,4 @@
-export const handleError = (error: unknown, context: string) => {
-    console.error(`${context}:`, error);
-    return { success: false, message: 'An error occurred' };
+export const handleError = (error: Error): void => {
+  console.error('An error occurred:', error.message);
+  // Additional error handling logic...
 }; 

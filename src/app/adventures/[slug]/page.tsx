@@ -1,43 +1,57 @@
-// src/app/pages/adventures/[slug]/page.tsx
-// Remove 'use client' directive to make this a server component
+// src/app/adventures/[slug]/page.tsx
+'use client';
 
+import { FC, useEffect, useState } from 'react';
+import { JSX } from 'react';
+import { Metadata } from 'next'; // Import Metadata if needed
 import { fetchAdventureById } from '@/lib/adventureDbService';
 import { IAdventurePlain } from '@/models/Adventure';
 import { disassembleSlug } from '@/utils/slug';
-import { Metadata } from 'next'; // Import Metadata if needed
 
-// Define the component with params as a promise
-export default async function AdventurePage({
-  params,
-}: {
-  params: Promise<{ slug: string }>; // Define params as a promise
-}) {
-  const resolvedParams = await params; // Await the params to get the actual value
-  const result = disassembleSlug(resolvedParams.slug);
+const AdventurePage: FC<{ params: { slug: string } }> = ({ params }): JSX.Element => {
+  const [fetchedAdventure, setFetchedAdventure] = useState<IAdventurePlain | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!result || !result._id) {
-    return <div>Invalid adventure slug</div>; // Handle invalid slug
-  }
+  useEffect(() => {
+    const result = disassembleSlug(params.slug);
 
-  try {
-    const fetchedAdventure: IAdventurePlain | null = await fetchAdventureById(result._id);
-    
-    // Check if fetchedAdventure is null
-    if (!fetchedAdventure) {
-      return <div>Adventure not found</div>; // Handle case where adventure is not found
+    if (!result || !result._id) {
+      setError('Invalid adventure slug');
+      return;
     }
 
-    return (
-      <div>
-        <h1>{fetchedAdventure.name}</h1>
-        <p>{fetchedAdventure.description}</p>
-        {/* Render other adventure details as needed */}
-      </div>
-    );
-  } catch (err) {
-    console.error(err);
-    return <div>Error loading adventure</div>; // Handle fetch error
+    const fetchAdventure = async (): Promise<void> => {
+      try {
+        const adventure = await fetchAdventureById(result._id);
+        if (!adventure) {
+          setError('Adventure not found');
+        } else {
+          setFetchedAdventure(adventure);
+        }
+      } catch (err) {
+        console.error(err);
+        setError('Error loading adventure');
+      }
+    };
+
+    fetchAdventure();
+  }, [params.slug]);
+
+  if (error) {
+    return <div>{error}</div>; // Handle error display
   }
+
+  if (!fetchedAdventure) {
+    return <div>Loading...</div>; // Handle loading state
+  }
+
+  return (
+    <div>
+      <h1>{fetchedAdventure.name}</h1>
+      <p>{fetchedAdventure.description}</p>
+      {/* Render other adventure details as needed */}
+    </div>
+  );
 };
 
 // Optionally, you can define metadata for the page
@@ -45,3 +59,5 @@ export const metadata: Metadata = {
   title: 'Adventure Details',
   description: 'Details about the selected adventure.',
 };
+
+export default AdventurePage;

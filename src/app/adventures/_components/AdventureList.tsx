@@ -1,16 +1,17 @@
-
 import Link from 'next/link';
 import { IAdventurePlain } from '@/models/Adventure';
 import { assembleSlug } from '@/utils/slug';
+import { FC } from 'react';
+import { JSX } from 'react';
 
 interface AdventuresListProps {
   adventures: IAdventurePlain[];
 }
 
-const AdventuresList = ({ adventures }: AdventuresListProps) => {
+const AdventureList: FC<AdventuresListProps> = ({ adventures }): JSX.Element => {
   return (
     <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {adventures?.map((adventure) => (
+      {adventures.map((adventure) => (
         <li
           key={adventure._id}
           className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition duration-300"
@@ -25,4 +26,4 @@ const AdventuresList = ({ adventures }: AdventuresListProps) => {
   );
 };
 
-export default AdventuresList;
+export default AdventureList;

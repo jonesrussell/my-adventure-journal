@@ -13,7 +13,7 @@ export const fetchAdventures = async (): Promise<IAdventurePlain[]> => {
   }));
 };
 
-export const createAdventure = async (adventureData: IAdventurePlain) => {
+export const createAdventure = async (adventureData: IAdventurePlain): Promise<IAdventurePlain> => {
   return await prisma.adventure.create({
     data: adventureData,
   });

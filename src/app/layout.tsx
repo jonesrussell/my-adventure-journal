@@ -5,7 +5,8 @@ import { Header } from '@/components/ui/Header';
 import { Inter as FontSans } from 'next/font/google';
 import QueryProvider from '@/providers/QueryProvider';
 import type { Metadata } from 'next';
-import type { ReactNode } from 'react';
+import { FC } from 'react';
+import { JSX } from 'react';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -17,11 +18,7 @@ export const metadata: Metadata = {
   description: 'Adventure Journal',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
+const Layout: FC = (): JSX.Element => {
   return (
     <html lang="en">
       <body
@@ -33,11 +30,13 @@ export default function RootLayout({
         <QueryProvider>
           <div className="min-h-screen bg-gray-100 grid grid-rows-[auto,1fr,auto]">
             <Header />
-            {children}
+            {/* Your existing code... */}
           </div>
         </QueryProvider>
         <Footer />
       </body>
     </html>
   );
-}
+};
+
+export default Layout;
