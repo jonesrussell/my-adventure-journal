@@ -10,8 +10,9 @@ interface FormProps<T extends FieldValues> {
 const Form = <T extends FieldValues>({ formMethods, children }: FormProps<T>): JSX.Element => {
   return (
     <FormProvider {...formMethods}>
-      <form onSubmit={formMethods.handleSubmit((_values: T) => {
-        // You can leave this empty if you don't need to use it
+      <form onSubmit={formMethods.handleSubmit((values: T) => {
+        // Handle form submission
+        console.log(values); // Example usage
       })}>
         {children}
       </form>
