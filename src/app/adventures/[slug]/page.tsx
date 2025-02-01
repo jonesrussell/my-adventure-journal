@@ -3,7 +3,7 @@
 
 import { FC, useEffect, useState } from 'react';
 import { JSX } from 'react';
-import { Metadata } from 'next'; // Import Metadata if needed
+// import { Metadata } from 'next'; // Import Metadata if needed
 import { fetchAdventureById } from '@/lib/adventureDbService';
 import { IAdventurePlain } from '@/models/Adventure';
 import { disassembleSlug } from '@/utils/slug';
@@ -55,9 +55,9 @@ const AdventurePage: FC<{ params: { slug: string } }> = ({ params }): JSX.Elemen
 };
 
 // Optionally, you can define metadata for the page
-export const metadata: Metadata = {
-  title: 'Adventure Details',
-  description: 'Details about the selected adventure.',
-};
+// export const metadata: Metadata = {
+//   title: 'Adventure Details',
+//   description: 'Details about the selected adventure.',
+// };
 
 export default AdventurePage;
