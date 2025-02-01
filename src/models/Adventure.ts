@@ -1,6 +1,3 @@
-// Remove Mongoose imports
-// import { Document } from 'mongoose';
-
 // Define the plain interface for Adventure
 export interface IAdventurePlain {
   _id?: string; // Make this optional, as it may not be present when creating a new adventure

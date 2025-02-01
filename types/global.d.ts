@@ -1,9 +1,9 @@
-interface ExtendedGlobal extends NodeJS.Global {
-  mongoose?: {
-    conn: typeof import('mongoose') | null;
-    promise: Promise<typeof import('mongoose')> | null;
-  };
-}
+// interface ExtendedGlobal extends NodeJS.Global {
+//   mongoose?: {
+//     conn: typeof import('mongoose') | null;
+//     promise: Promise<typeof import('mongoose')> | null;
+//   };
+// }
 
-// Then, adjust your declaration accordingly
-declare const global: ExtendedGlobal;
+// // Then, adjust your declaration accordingly
+// declare const global: ExtendedGlobal;
