@@ -24,4 +24,4 @@ const authOptions: NextAuthConfig = {
   // Add any additional NextAuth options here
 };
 
-export const { handlers: { GET, POST } } = NextAuth(authOptions)
+export const { handlers: { GET, POST } } = NextAuth(authOptions);

@@ -4,7 +4,7 @@ const nextConfig = {
   reactStrictMode: true,
 
   // Add Webpack configuration to handle Node.js modules
-  webpack: (config, { isServer, nextRuntime }) => {
+  webpack: (config, { nextRuntime }) => {
     // Add custom rules or modify existing ones
     config.resolve.fallback = {
       ...config.resolve.fallback,

@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { signIn } from "next-auth/react";
-import { createUser } from "@/lib/userDbService";
+import { useState } from 'react';
+import { signIn } from 'next-auth/react';
+import { createUser } from '@/lib/userDbService';
 
 const Auth = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   const handleSignIn = async () => {
-    const result = await signIn("credentials", {
+    const result = await signIn('credentials', {
       email,
       password,
       redirect: false,
     });
 
     if (result?.error) {
-      console.error("Sign in error:", result.error);
+      console.error('Sign in error:', result.error);
       setError(result.error);
     } else {
       // Handle successful sign-in (e.g., redirect or show a success message)
