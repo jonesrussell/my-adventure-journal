@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 
 const navItems = [
-  { href: '#', label: 'About' },
+  { href: '/about', label: 'About' },
   { href: '/adventures', label: 'Adventures' },
   { href: '#', label: 'Contact' },
   { href: '/signin', label: 'Login' },
