@@ -1,16 +1,12 @@
 // src/auth.ts
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { getUserFromDb } from '@/utils/db';
-import { IUser } from '@/models/User';
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
+const prisma = new PrismaClient();
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const authOptions = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -19,21 +15,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        if (!credentials) {
+        // Check if credentials are provided
+        if (!credentials || !credentials.username || !credentials.password) {
           throw new Error('No credentials provided');
         }
 
-        const user = await getUserFromDb(credentials.username, credentials.password);
-        if (user) {
-          return {
-            id: user.id.toString(),
-            name: user.name,
-            email: user.email,
-          };
+        const user = await prisma.user.findUnique({
+          where: { username: credentials.username },
+        });
+
+        if (user && (await bcrypt.compare(credentials.password, user.hashedPassword))) {
+          return { id: user.id, name: user.name, email: user.email };
         } else {
           return null;
         }
       }
     }),
   ],
-});
+};
+
+export default NextAuth(authOptions);

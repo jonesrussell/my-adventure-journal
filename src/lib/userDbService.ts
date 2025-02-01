@@ -1,7 +1,7 @@
 // src/lib/userDbService.ts
 import { PrismaClient } from '@prisma/client';
 import { IUser } from '@/models/User';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
