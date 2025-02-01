@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
+import { JSX } from 'react';
 
 export const Footer: FC = (): JSX.Element => {
   return (

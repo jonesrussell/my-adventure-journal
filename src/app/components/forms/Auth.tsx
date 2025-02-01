@@ -3,6 +3,7 @@
 import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 import { FC } from 'react';
+import { JSX } from 'react';
 
 const Auth: FC = (): JSX.Element => {
   return (
