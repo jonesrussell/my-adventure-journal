@@ -1,7 +1,7 @@
 // src/app/signup/page.tsx
 'use client';
 
-import React, { useState, FormEvent } from 'react';
+import { useState, FormEvent } from 'react';
 import { signupUser } from '@/actions/ActionsUser';
 
 export default function Page() {

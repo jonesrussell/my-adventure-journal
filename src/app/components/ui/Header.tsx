@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { NavBar } from '@/components/ui/NavBar';
 import Link from 'next/link';
 

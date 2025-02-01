@@ -1,5 +1,5 @@
 // src/app/page.tsx
-import React from 'react';
+
 import AdventuresList from './adventures/_components/AdventureList';
 import Hero from '@/components/ui/Hero';
 import About from '@/components/ui/About';

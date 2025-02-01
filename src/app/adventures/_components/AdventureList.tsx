@@ -1,4 +1,4 @@
-import React from 'react';
+
 import Link from 'next/link';
 import { IAdventurePlain } from '@/models/Adventure';
 import { assembleSlug } from '@/utils/slug';
