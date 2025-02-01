@@ -17,7 +17,7 @@ export default function Page() {
       if (result.success) {
         setIsSuccessful(true);
       } else {
-        setErrorMessage(result.message);
+        setErrorMessage(result.message || 'An unknown error occurred.');
       }
     } catch (error: unknown) {
       // Assert the type of error to access its message property

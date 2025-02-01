@@ -17,11 +17,11 @@ export default function Page() {
       if (result.success) {
         setIsSuccessful(true);
       } else {
-        setErrorMessage(result.message);
+        setErrorMessage(result.message || 'An unknown error occurred.');
       }
     } catch (error: unknown) {
       const errorMessage =
-        typeof error === 'object' ? (error as Error).message : '';
+        typeof error === 'object' && error !== null ? (error as Error).message : 'An unexpected error occurred.';
       setErrorMessage(errorMessage);
     }
   };
