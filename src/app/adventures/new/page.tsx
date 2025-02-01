@@ -1,6 +1,5 @@
 'use client';
 
-
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,8 +15,9 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { createAdventure } from '@/lib/adventureDbService';
+import type { FC } from 'react';
 
-const NewAdventurePage = () => {
+const NewAdventurePage: FC = () => {
   const newAdventureSchema = z.object({
     name: z.string().min(8, {
       message: 'Adventer name must be at least 8 characters.',

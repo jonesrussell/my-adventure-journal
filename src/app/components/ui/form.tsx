@@ -1,4 +1,12 @@
-import { forwardRef, createContext, useContext, useId } from 'react';
+import {
+  forwardRef,
+  createContext,
+  useContext,
+  useId,
+  HTMLAttributes,
+  ComponentRef,
+  ComponentPropsWithoutRef,
+} from 'react';
 import * as LabelPrimitive from '@radix-ui/react-label';
 import { Slot } from '@radix-ui/react-slot';
 import {
@@ -72,7 +80,7 @@ const FormItemContext = createContext<FormItemContextValue>(
 
 const FormItem = forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
+  HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
   const id = useId();
 
@@ -85,8 +93,8 @@ const FormItem = forwardRef<
 FormItem.displayName = 'FormItem';
 
 const FormLabel = forwardRef<
-  React.ElementRef<typeof LabelPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
+  ComponentRef<typeof LabelPrimitive.Root>,
+  ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
 >(({ className, ...props }, ref) => {
   const { error, formItemId } = useFormField();
 
@@ -102,8 +110,8 @@ const FormLabel = forwardRef<
 FormLabel.displayName = 'FormLabel';
 
 const FormControl = forwardRef<
-  React.ElementRef<typeof Slot>,
-  React.ComponentPropsWithoutRef<typeof Slot>
+  ComponentRef<typeof Slot>,
+  ComponentPropsWithoutRef<typeof Slot>
 >(({ ...props }, ref) => {
   const { error, formItemId, formDescriptionId, formMessageId } = useFormField();
 
@@ -125,7 +133,7 @@ FormControl.displayName = 'FormControl';
 
 const FormDescription = forwardRef<
   HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
+  HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => {
   const { formDescriptionId } = useFormField();
 
@@ -142,7 +150,7 @@ FormDescription.displayName = 'FormDescription';
 
 const FormMessage = forwardRef<
   HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
+  HTMLAttributes<HTMLParagraphElement>
 >(({ className, children, ...props }, ref) => {
   const { error, formMessageId } = useFormField();
   const body = error ? String(error?.message) : children;
