@@ -3,8 +3,9 @@
 import { fetchAdventures } from '@/lib/adventureDbService';
 import AdventureList from './_components/AdventureList';
 import { IAdventurePlain } from '@/models/Adventure';
+import type { FC } from 'react';
 
-const AdventuresPage: React.FC = async () => {
+const AdventuresPage: FC = async () => {
   let adventures: IAdventurePlain[] = [];
   let errorMessage: string | null = null;
 

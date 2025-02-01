@@ -1,10 +1,10 @@
-
+import type { FC } from 'react';
 
 interface SignInFormProps {
   onSubmit: () => void;
 }
 
-const SignInForm: React.FC<SignInFormProps> = ({ onSubmit }) => {
+const SignInForm: FC<SignInFormProps> = ({ onSubmit }) => {
   return (
     <form onSubmit={onSubmit}>
       {/* Add your input fields for email and password here */}

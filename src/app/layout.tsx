@@ -5,6 +5,7 @@ import { Header } from '@/components/ui/Header';
 import { Inter as FontSans } from 'next/font/google';
 import QueryProvider from '@/providers/QueryProvider';
 import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -18,9 +19,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: ReactNode;
+}) {
   return (
     <html lang="en">
       <body
