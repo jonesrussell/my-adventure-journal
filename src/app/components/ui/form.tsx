@@ -191,7 +191,9 @@ interface FormProps<T extends FieldValues> {
 const Form = <T extends FieldValues>({ control, handleSubmit, children }: FormProps<T>): JSX.Element => {
   return (
     <FormProvider {...{ control }}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit((values: T) => {
+        // Handle form submission here
+      })}>
         {children}
       </form>
     </FormProvider>

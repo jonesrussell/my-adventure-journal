@@ -1,7 +1,7 @@
 'use client';
 
 import { z } from 'zod';
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
@@ -18,6 +18,8 @@ import { createAdventure } from '@/lib/adventureDbService';
 import { FC } from 'react';
 import { JSX } from 'react';
 import { NewAdventureFormValues } from '@/types/NewAdventureFormValues'; // Ensure this path is correct
+import Form from '@/components/ui/Form';
+import FormField from '@/components/ui/FormField';
 
 const NewAdventurePage: FC = (): JSX.Element => {
   const newAdventureSchema = z.object({
@@ -32,7 +34,7 @@ const NewAdventurePage: FC = (): JSX.Element => {
     }),
   });
 
-  const { control, handleSubmit } = useForm<NewAdventureFormValues>({
+  const formMethods = useForm<NewAdventureFormValues>({
     resolver: zodResolver(newAdventureSchema),
     defaultValues: {
       name: '',
@@ -41,7 +43,7 @@ const NewAdventurePage: FC = (): JSX.Element => {
     },
   });
 
-  const onSubmit = async (data: NewAdventureFormValues): Promise<void> => {
+  const onSubmit: SubmitHandler<NewAdventureFormValues> = async (data) => {
     try {
       const newAdventure = await createAdventure(data);
       console.log('Adventure created successfully:', newAdventure);
@@ -51,9 +53,9 @@ const NewAdventurePage: FC = (): JSX.Element => {
   };
 
   return (
-    <Form control={control} handleSubmit={handleSubmit(onSubmit)}>
+    <Form formMethods={formMethods}>
       <FormField
-        control={control}
+        control={formMethods.control}
         name="name"
         render={({ field }) => (
           <FormItem>
@@ -67,7 +69,7 @@ const NewAdventurePage: FC = (): JSX.Element => {
         )}
       />
       <FormField
-        control={control}
+        control={formMethods.control}
         name="location"
         render={({ field }) => (
           <FormItem>
@@ -81,7 +83,7 @@ const NewAdventurePage: FC = (): JSX.Element => {
         )}
       />
       <FormField
-        control={control}
+        control={formMethods.control}
         name="description"
         render={({ field }) => (
           <FormItem>
