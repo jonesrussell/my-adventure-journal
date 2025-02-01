@@ -19,6 +19,7 @@ interface SignupFormData {
 interface SignInFormData {
   username: string;
   password: string;
+  email: string;
 }
 
 // Utility function to validate form data
@@ -78,6 +79,7 @@ export async function signinUser(formData: FormData) {
   const rawFormData: SignInFormData = {
     username: String(formData.get('username')),
     password: String(formData.get('password')),
+    email: String(formData.get('email')),
   };
 
   // Validate signin data
