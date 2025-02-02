@@ -13,7 +13,7 @@ const SignUpPage: FC = (): JSX.Element => {
   // Initialize state for action
   const [state, formAction, pending] = useActionState(
     async (state: { message: string | { [key: string]: string[] } }, formData: FormData) => {
-      return await signupUser(formData); // Call createUser with FormData
+      return await signupUser(formData); // Call signupUser with FormData
     },
     initialState
   );
@@ -29,15 +29,43 @@ const SignUpPage: FC = (): JSX.Element => {
 
         <div className="mb-4 mt-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">Username</label>
-          <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" name="username" required />
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            name="username"
+            required
+            autoComplete="username"
+          />
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">Email</label>
-          <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="email" name="email" required />
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="email"
+            name="email"
+            required
+            autoComplete="email"
+          />
         </div>
         <div className="mb-6">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">Password</label>
-          <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" type="password" name="password" required autoComplete="new-password" />
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            type="password"
+            name="password"
+            required
+            autoComplete="new-password"
+          />
+        </div>
+        <div className="mb-6">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirmPassword">Confirm Password</label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            type="password"
+            name="confirmPassword"
+            required
+            autoComplete="new-password"
+          />
         </div>
         <div className="flex items-center justify-between">
           <button disabled={pending} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">Sign Up</button>
