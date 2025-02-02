@@ -3,7 +3,7 @@
 
 import { FC, JSX } from 'react';
 import { useActionState } from 'react';
-import { createUser } from '@/actions';
+import { signupUser } from '@/actions/ActionsUser';
 
 const initialState = {
   message: '',
@@ -13,7 +13,7 @@ const SignUpPage: FC = (): JSX.Element => {
   // Initialize state for action
   const [state, formAction, pending] = useActionState(
     async (state: { message: string | { [key: string]: string[] } }, formData: FormData) => {
-      return await createUser(formData); // Call createUser with FormData
+      return await signupUser(formData); // Call createUser with FormData
     },
     initialState
   );
