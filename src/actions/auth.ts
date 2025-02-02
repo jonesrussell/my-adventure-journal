@@ -42,7 +42,9 @@ function checkPasswordsMatch(password: string, confirmPassword: string): { succe
  * @param formData - The form data containing user information.
  * @returns A promise that resolves to an object indicating success and a message.
  */
-export async function signup(formData: FormData): Promise<{ success: boolean; message: string; errors?: Record<string, string> }> {
+export async function signup(formData: FormData): Promise<{ success: boolean; message: string; errors?: Record<string, string[]> }> {
+  const errors: Record<string, string[]> = {}; // Initialize errors as an object with arrays
+
   const rawFormData: SignupFormData = {
     username: String(formData.get('username')),
     email: String(formData.get('email')),
@@ -53,20 +55,19 @@ export async function signup(formData: FormData): Promise<{ success: boolean; me
   // Use validateFormData to validate the signup form fields
   const validationResult = validateFormData(SignupFormSchema, rawFormData);
   if (!validationResult.success) {
-    return {
-      success: false,
-      message: 'Validation failed',
-      errors: validationResult.message.split(', ').reduce((acc, error) => {
-        acc[error] = error; // Create an object with error messages
-        return acc;
-      }, {} as Record<string, string>),
-    };
+    errors.validation = errors.validation || [];
+    errors.validation.push(validationResult.message);
   }
 
   // Check if passwords match
   const passwordMatchResult = checkPasswordsMatch(rawFormData.password, rawFormData.confirmPassword);
   if (!passwordMatchResult.success) {
-    return { success: false, message: passwordMatchResult.message }; // Return password mismatch error
+    errors.password = errors.password || [];
+    errors.password.push(passwordMatchResult.message);
+  }
+
+  if (Object.keys(errors).length > 0) {
+    return { success: false, message: 'Validation failed', errors }; // Return errors as arrays
   }
 
   // Pass the plain password to createUser
