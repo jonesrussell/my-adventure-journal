@@ -3,7 +3,7 @@
 
 import { FC, JSX } from 'react';
 import { useActionState } from 'react';
-import { signinUser } from '@/actions/ActionsUser';
+import { signinUser } from '@/actions/auth';
 
 const initialState = {
   message: '',

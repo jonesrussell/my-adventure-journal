@@ -1,10 +1,10 @@
-// src/actions/ActionsUser.ts
+// src/actions/auth.ts
 'use server';
 
 import { createUser, getUser } from '@/lib/userDbService'; // Ensure this path is correct
-import { SignInSchema, SignupSchema } from '@/utils/zod'; // Updated path to zod
-import { hashPassword, comparePasswords } from '@/utils/passwordUtils'; // Ensure this path is correct
+import { comparePasswords } from '@/utils/passwordUtils'; // Ensure this path is correct
 import { ZodSchema } from 'zod'; // Import ZodSchema
+import { SignupFormSchema, SignInFormSchema } from '@/lib/definitions'; // Remove if not used
 
 // Define an interface for the sign-in form data
 interface SignInFormData {
@@ -18,7 +18,6 @@ interface SignupFormData {
   email: string;
   password: string;
   confirmPassword: string;
-  name: string;
 }
 
 // Utility function to validate form data
@@ -43,38 +42,42 @@ function checkPasswordsMatch(password: string, confirmPassword: string): { succe
  * @param formData - The form data containing user information.
  * @returns A promise that resolves to an object indicating success and a message.
  */
-export async function signupUser(formData: FormData): Promise<{ success: boolean; message: string }> {
+export async function signup(formData: FormData): Promise<{ success: boolean; message: string; errors?: Record<string, string> }> {
   const rawFormData: SignupFormData = {
     username: String(formData.get('username')),
     email: String(formData.get('email')),
     password: String(formData.get('password')),
     confirmPassword: String(formData.get('confirmPassword')),
-    name: String(formData.get('name')),
   };
 
-  // Validate signup data
-  const validationResult = validateFormData(SignupSchema, rawFormData);
+  // Use validateFormData to validate the signup form fields
+  const validationResult = validateFormData(SignupFormSchema, rawFormData);
   if (!validationResult.success) {
-    return { success: false, message: validationResult.message }; // Ensure message is a string
+    return {
+      success: false,
+      message: 'Validation failed',
+      errors: validationResult.message.split(', ').reduce((acc, error) => {
+        acc[error] = error; // Create an object with error messages
+        return acc;
+      }, {} as Record<string, string>),
+    };
   }
 
   // Check if passwords match
   const passwordMatchResult = checkPasswordsMatch(rawFormData.password, rawFormData.confirmPassword);
   if (!passwordMatchResult.success) {
-    return passwordMatchResult; // Return password mismatch error
+    return { success: false, message: passwordMatchResult.message }; // Return password mismatch error
   }
 
-  // Hash the password before saving
-  const hashedPassword = await hashPassword(rawFormData.password);
-
+  // Pass the plain password to createUser
   const newUser = {
     username: rawFormData.username,
     email: rawFormData.email,
-    password: hashedPassword, // Use hashed password
-    name: rawFormData.name,
+    password: rawFormData.password, // Pass the plain password
+    name: rawFormData.username, // Assuming name is required in your schema
   };
 
-  await createUser(newUser);
+  await createUser(newUser); // Use createUser function from userDbService
 
   return { success: true, message: 'User created successfully!' };
 }
@@ -84,16 +87,22 @@ export async function signupUser(formData: FormData): Promise<{ success: boolean
  * @param formData - The form data containing user credentials.
  * @returns A promise that resolves to an object with a message indicating success or failure.
  */
-export async function signinUser(formData: FormData): Promise<{ message: string }> {
+export async function signinUser(formData: FormData): Promise<{ message: string; errors?: Record<string, string> }> {
   const rawFormData: SignInFormData = {
     username: String(formData.get('username')),
     password: String(formData.get('password')),
   };
 
-  // Validate signin data
-  const validationResult = validateFormData(SignInSchema, rawFormData);
+  // Use validateFormData to validate the signin data
+  const validationResult = validateFormData(SignInFormSchema, rawFormData);
   if (!validationResult.success) {
-    return { message: validationResult.message }; // Ensure message is a string
+    return {
+      message: 'Validation failed',
+      errors: validationResult.message.split(', ').reduce((acc, error) => {
+        acc[error] = error; // Create an object with error messages
+        return acc;
+      }, {} as Record<string, string>),
+    };
   }
 
   const user = await getUser(rawFormData.username); // Get user from database

@@ -1,4 +1,4 @@
-// src/lib/userDbService.ts
+// src/app/lib/userDbService.ts
 import { PrismaClient } from '@prisma/client';
 import { IUser } from '@/models/User';
 import argon2 from 'argon2';

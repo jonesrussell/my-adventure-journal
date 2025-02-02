@@ -36,7 +36,7 @@
         "./app/lib/*"
       ],
       "@/models/*": [
-        "./models/*"
+        "./app/models/*"
       ],
       "@/providers/*": [
         "./providers/*"
