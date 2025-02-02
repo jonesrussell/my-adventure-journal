@@ -44,6 +44,9 @@
       "@/providers/*": [
         "./providers/*"
       ],
+      "@/types/*": [
+        "./types/*"
+      ],
       "@/utils/*": [
         "./app/utils/*"
       ],
