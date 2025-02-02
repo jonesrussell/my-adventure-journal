@@ -13,13 +13,12 @@ import {
 } from '@/app/components/ui/FormIndex';
 import { Input } from '@/components/ui/input';
 import { createAdventure } from '@/lib/adventureDbService';
-import { FC } from 'react';
-import { JSX } from 'react';
+import { FC, ReactNode } from 'react';
 import { NewAdventureFormValues } from '@/types/NewAdventureFormValues'; // Ensure this path is correct
 import Form from '@/components/ui/Form';
 import FormField from '@/components/ui/FormField';
 
-const NewAdventurePage: FC = (): JSX.Element => {
+const NewAdventurePage: FC = (): ReactNode => {
   const newAdventureSchema = z.object({
     name: z.string().min(8, {
       message: 'Adventure name must be at least 8 characters.',
