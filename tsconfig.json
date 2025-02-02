@@ -38,6 +38,9 @@
       "@/models/*": [
         "./models/*"
       ],
+      "@/providers/*": [
+        "./providers/*"
+      ],
       "@/utils/*": [
         "./app/utils/*"
       ]
