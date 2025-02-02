@@ -27,10 +27,15 @@ const authOptions: NextAuthConfig = {
     }),
   ],
   callbacks: {
-    async signIn({ credentials }) {
+    async signIn({ credentials }: { credentials?: Record<string, unknown> }) {
       if (!credentials) return false; // Handle undefined credentials
 
-      const { username, password } = credentials as Record<string, string>;
+      const username = (credentials.username as string) || ''; // Assert as string
+      const password = (credentials.password as string) || ''; // Assert as string
+
+      // Check if username and password are defined
+      if (!username || !password) return false; // Return false if either is missing
+
       const dbUser = await prisma.user.findUnique({
         where: { username },
       });
@@ -45,11 +50,11 @@ const authOptions: NextAuthConfig = {
       if (user) {
         token.id = user.id; // Add user ID to the token
       }
-      return token;
+      return token; // Return the modified token
     },
     async session({ session, token }) {
-      if (token) {
-        session.user.id = token.id; // Add user ID to the session
+      if (token && typeof token.id === 'string') {
+        session.user.id = token.id;
       }
       return session;
     },
