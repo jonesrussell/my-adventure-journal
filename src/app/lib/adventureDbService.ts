@@ -4,6 +4,18 @@ import { IAdventurePlain } from '@/models/Adventure';
 
 const prisma = new PrismaClient();
 
+// Fetch all adventures
+export const fetchAdventures = async (): Promise<IAdventurePlain[]> => {
+  const adventures = await prisma.adventure.findMany();
+  return adventures.map(adventure => ({
+    _id: adventure.id,
+    name: adventure.name,
+    location: adventure.location,
+    description: adventure.description,
+  }));
+};
+
+// Create a new adventure
 export const createAdventure = async (adventureData: IAdventurePlain): Promise<IAdventurePlain> => {
   const newAdventure = await prisma.adventure.create({
     data: adventureData,
@@ -11,10 +23,7 @@ export const createAdventure = async (adventureData: IAdventurePlain): Promise<I
   return newAdventure; // This should return the full adventure object, including _id
 };
 
-export const fetchAdventures = async (): Promise<IAdventurePlain[]> => {
-  return await prisma.adventure.findMany();
-};
-
+// Fetch an adventure by ID
 export async function fetchAdventureById(_id: string): Promise<IAdventurePlain | null> {
   try {
     const adventureDocument = await prisma.adventure.findUnique({
