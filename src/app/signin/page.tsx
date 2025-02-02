@@ -11,7 +11,7 @@ const initialState = {
 
 const SignInPage: FC = (): JSX.Element => {
   const [state, formAction, pending] = useActionState(
-    async (state: { message: string }, formData: FormData) => {
+    async (state: { message: string | { [key: string]: string[] } }, formData: FormData) => {
       return await signinUser(formData); // Call signinUser with FormData
     },
     initialState

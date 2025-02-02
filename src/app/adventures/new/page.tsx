@@ -18,7 +18,6 @@ import { JSX } from 'react';
 import { NewAdventureFormValues } from '@/types/NewAdventureFormValues'; // Ensure this path is correct
 import Form from '@/components/ui/Form';
 import FormField from '@/components/ui/FormField';
-import FormFieldProvider from '@/providers/FormFieldProvider';
 
 const NewAdventurePage: FC = (): JSX.Element => {
   const newAdventureSchema = z.object({
@@ -52,55 +51,53 @@ const NewAdventurePage: FC = (): JSX.Element => {
   };
 
   return (
-    <FormFieldProvider>
-      <Form formMethods={formMethods}>
-        <form onSubmit={formMethods.handleSubmit(onSubmit)}>
-          <FormField
-            control={formMethods.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Type a name" {...field} />
-                </FormControl>
-                <FormDescription>Name for your Adventure</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={formMethods.control}
-            name="location"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Location</FormLabel>
-                <FormControl>
-                  <Input placeholder="Type a location" {...field} />
-                </FormControl>
-                <FormDescription>Location of your Adventure</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={formMethods.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <Input placeholder="Describe your adventure" {...field} />
-                </FormControl>
-                <FormDescription>Description of your Adventure</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit">Add New</Button>
-        </form>
-      </Form>
-    </FormFieldProvider>
+    <Form formMethods={formMethods}>
+      <form onSubmit={formMethods.handleSubmit(onSubmit)}>
+        <FormField
+          control={formMethods.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Type a name" {...field} />
+              </FormControl>
+              <FormDescription>Name for your Adventure</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={formMethods.control}
+          name="location"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Location</FormLabel>
+              <FormControl>
+                <Input placeholder="Type a location" {...field} />
+              </FormControl>
+              <FormDescription>Location of your Adventure</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={formMethods.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Input placeholder="Describe your adventure" {...field} />
+              </FormControl>
+              <FormDescription>Description of your Adventure</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Add New</Button>
+      </form>
+    </Form>
   );
 };
 
