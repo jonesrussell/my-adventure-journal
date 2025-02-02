@@ -43,6 +43,9 @@
       ],
       "@/utils/*": [
         "./app/utils/*"
+      ],
+      "@/ui/*": [
+        "./app/ui/*"
       ]
     },
     "baseUrl": "src/",
