@@ -10,7 +10,6 @@ import { ZodSchema } from 'zod'; // Import ZodSchema
 interface SignInFormData {
   username: string;
   password: string;
-  email: string;
 }
 
 // Define an interface for the sign-up form data
@@ -39,6 +38,11 @@ function checkPasswordsMatch(password: string, confirmPassword: string): { succe
   return { success: true, message: 'Passwords match' }; // Ensure message is always a string
 }
 
+/**
+ * Sign up a new user.
+ * @param formData - The form data containing user information.
+ * @returns A promise that resolves to an object indicating success and a message.
+ */
 export async function signupUser(formData: FormData): Promise<{ success: boolean; message: string }> {
   const rawFormData: SignupFormData = {
     username: String(formData.get('username')),
@@ -75,25 +79,29 @@ export async function signupUser(formData: FormData): Promise<{ success: boolean
   return { success: true, message: 'User created successfully!' };
 }
 
-export async function signinUser(formData: FormData): Promise<{ success: boolean; message: string }> {
+/**
+ * Sign in an existing user.
+ * @param formData - The form data containing user credentials.
+ * @returns A promise that resolves to an object with a message indicating success or failure.
+ */
+export async function signinUser(formData: FormData): Promise<{ message: string }> {
   const rawFormData: SignInFormData = {
     username: String(formData.get('username')),
     password: String(formData.get('password')),
-    email: String(formData.get('email')),
   };
 
   // Validate signin data
   const validationResult = validateFormData(SignInSchema, rawFormData);
   if (!validationResult.success) {
-    return validationResult; // Return validation errors
+    return { message: validationResult.message }; // Ensure message is a string
   }
 
   const user = await getUser(rawFormData.username); // Get user from database
   if (!user || !(await comparePasswords(rawFormData.password, user.hashedPassword))) {
     // If user doesn't exist or password doesn't match, return an error
-    return { success: false, message: 'Invalid username or password' };
+    return { message: 'Invalid username or password' };
   }
 
   // If everything is okay, return a success message
-  return { success: true, message: 'Login successful!' };
+  return { message: 'Login successful!' };
 }
