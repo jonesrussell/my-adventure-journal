@@ -1,31 +1,19 @@
-import NextAuth from 'next-auth';
+import NextAuth, { NextAuthConfig } from 'next-auth';
 import GitHubProvider from 'next-auth/providers/github';
 import EmailProvider from 'next-auth/providers/nodemailer';
 import { PrismaClient } from '@prisma/client';
-import { IUser } from '@/models/User'; // Ensure this path is correct
+import { comparePasswords } from '@/utils/passwordUtils'; // Ensure this path is correct
 
 // Initialize Prisma Client
 const prisma = new PrismaClient();
 
-// Define types for JWT and Session
-interface JWT {
-  id: string;
-  name?: string | null; // Allow null to match expected types
-  email?: string | null; // Allow null to match expected types
-}
-
-interface Session {
-  user: {
-    id: string;
-    name?: string | null; // Allow null to match expected types
-    email?: string | null; // Allow null to match expected types
-  };
-  expires: string; // Add expires property
-}
-
-// Function to configure providers
-const configureProviders = () => {
-  return [
+// NextAuth configuration
+const authOptions: NextAuthConfig = {
+  providers: [
+    GitHubProvider({
+      clientId: process.env.GITHUB_ID,
+      clientSecret: process.env.GITHUB_SECRET,
+    }),
     EmailProvider({
       server: {
         host: process.env.EMAIL_HOST,
@@ -35,41 +23,41 @@ const configureProviders = () => {
           pass: process.env.EMAIL_PASS,
         },
       },
-      from: process.env.EMAIL_FROM, // The email address to send from
-      // The EmailProvider handles sending the email automatically
+      from: process.env.EMAIL_FROM,
     }),
-    GitHubProvider({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
-    }),
-  ];
-};
-
-// NextAuth configuration
-export const { handlers, auth } = NextAuth({
-  providers: configureProviders(),
+  ],
   callbacks: {
-    async jwt({ token, user, account, profile }: { token: JWT; user?: IUser; account?: any; profile?: any }): Promise<JWT> {
+    async signIn({ credentials }) {
+      if (!credentials) return false; // Handle undefined credentials
+
+      const { username, password } = credentials as Record<string, string>;
+      const dbUser = await prisma.user.findUnique({
+        where: { username },
+      });
+
+      if (!dbUser || !(await comparePasswords(password, dbUser.hashedPassword))) {
+        return false; // Return false to indicate sign-in failure
+      }
+
+      return true; // Return true to indicate sign-in success
+    },
+    async jwt({ token, user }) {
       if (user) {
-        token.id = user.id; // Ensure user.id is present
-        token.name = user.name || null; // Ensure name can be null
-        token.email = user.email || null; // Ensure email can be null
+        token.id = user.id; // Add user ID to the token
       }
       return token;
     },
-    async session({ session, token }: { session: Session; token: JWT }): Promise<Session> {
+    async session({ session, token }) {
       if (token) {
-        session.user.id = token.id;
-        session.user.name = token.name || null; // Ensure name can be null
-        session.user.email = token.email || null; // Ensure email can be null
+        session.user.id = token.id; // Add user ID to the session
       }
-      session.expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(); // Set expiration date
       return session;
     },
   },
   session: {
-    strategy: 'jwt', // Use JWT for session management
+    strategy: 'jwt',
   },
-});
+};
 
+export const { handlers, auth } = NextAuth(authOptions);
 export default auth; 
