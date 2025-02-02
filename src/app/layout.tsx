@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   description: 'Adventure Journal',
 };
 
-const Layout: FC = (): JSX.Element => {
+const Layout: FC<{ children: React.ReactNode }> = ({ children }): JSX.Element => {
   return (
     <html lang="en">
       <body
@@ -27,10 +27,12 @@ const Layout: FC = (): JSX.Element => {
           fontSans.variable,
         )}
       >
+        <Header />
         <QueryProvider>
           <div className="min-h-screen bg-gray-100 grid grid-rows-[auto,1fr,auto]">
-            <Header />
-            {/* Your existing code... */}
+            <main className="container mx-auto px-4 py-8">
+              {children}
+            </main>
           </div>
         </QueryProvider>
         <Footer />

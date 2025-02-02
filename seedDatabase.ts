@@ -1,12 +1,20 @@
 import { PrismaClient } from '@prisma/client';
-import dotenv from 'dotenv';
-import argon2 from 'argon2'; // Import argon2 for password hashing
+import * as dotenv from 'dotenv';
+import * as argon2 from 'argon2'; // Use named import for argon2
 
+// Load environment variables from .env file
 dotenv.config();
 
-const prisma = new PrismaClient();
+// Initialize Prisma Client with the DATABASE_URL from the environment variables
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL, // Use the DATABASE_URL from .env
+    },
+  },
+});
 
-async function main() {
+async function main(): Promise<void> {
   // Example: Create a new adventure
   const adventure = await prisma.adventure.create({
     data: {

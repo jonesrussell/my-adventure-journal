@@ -10,6 +10,8 @@ import { fetchAdventures } from '@/lib/adventureDbService';
 const Home = async (): Promise<JSX.Element> => {
   const adventures: IAdventurePlain[] = await fetchAdventures();
 
+  console.log(adventures);
+
   return (
     <>
       <Hero />
@@ -22,6 +24,11 @@ const Home = async (): Promise<JSX.Element> => {
         </section>
 
         <About />
+
+        <p>
+          This is a simple paragraph that introduces users to the adventure journal application. 
+          Here, you can document your adventures, share experiences, and keep track of your journeys.
+        </p>
       </main>
     </>
   );
