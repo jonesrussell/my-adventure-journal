@@ -1,7 +1,7 @@
 'use client';
 
 import { z } from 'zod';
-import { useForm, SubmitHandler, UseFormReturn } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import {
@@ -32,7 +32,7 @@ const NewAdventurePage: FC = (): JSX.Element => {
     }),
   });
 
-  const formMethods: UseFormReturn<NewAdventureFormValues> = useForm<NewAdventureFormValues>({
+  const formMethods = useForm<NewAdventureFormValues>({
     resolver: zodResolver(newAdventureSchema),
     defaultValues: {
       name: '',
