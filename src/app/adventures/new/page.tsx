@@ -4,31 +4,16 @@ import { z } from 'zod';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
-import {
-  FormControl,
-  FormDescription,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/app/components/ui/FormIndex';
 import { Input } from '@/components/ui/input';
 import { createAdventure } from '@/lib/adventureDbService';
-import { FC, ReactNode } from 'react';
+import { FC } from 'react';
 import { NewAdventureFormValues } from '@/types/NewAdventureFormValues'; // Ensure this path is correct
-import Form from '@/components/ui/Form';
-import FormField from '@/components/ui/FormField';
 
-const NewAdventurePage: FC = (): ReactNode => {
+const NewAdventurePage: FC = () => {
   const newAdventureSchema = z.object({
-    name: z.string().min(8, {
-      message: 'Adventure name must be at least 8 characters.',
-    }),
-    location: z.string().min(2, {
-      message: 'Adventure location must be at least 2 characters.',
-    }),
-    description: z.string().min(10, {
-      message: 'Description must be at least 10 characters.',
-    }),
+    name: z.string().min(8, { message: 'Adventure name must be at least 8 characters.' }),
+    location: z.string().min(2, { message: 'Adventure location must be at least 2 characters.' }),
+    description: z.string().min(10, { message: 'Description must be at least 10 characters.' }),
   });
 
   const formMethods = useForm<NewAdventureFormValues>({
@@ -50,53 +35,30 @@ const NewAdventurePage: FC = (): ReactNode => {
   };
 
   return (
-    <Form formMethods={formMethods}>
-      <form onSubmit={formMethods.handleSubmit(onSubmit)}>
-        <FormField
-          control={formMethods.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Type a name" {...field} />
-              </FormControl>
-              <FormDescription>Name for your Adventure</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={formMethods.control}
-          name="location"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Location</FormLabel>
-              <FormControl>
-                <Input placeholder="Type a location" {...field} />
-              </FormControl>
-              <FormDescription>Location of your Adventure</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={formMethods.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Input placeholder="Describe your adventure" {...field} />
-              </FormControl>
-              <FormDescription>Description of your Adventure</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Add New</Button>
-      </form>
-    </Form>
+    <form onSubmit={formMethods.handleSubmit(onSubmit)}>
+      <div>
+        <label htmlFor="name">Name</label>
+        <Input {...formMethods.register('name')} placeholder="Type a name" />
+        {formMethods.formState.errors.name && (
+          <p className="text-red-600">{formMethods.formState.errors.name.message}</p>
+        )}
+      </div>
+      <div>
+        <label htmlFor="location">Location</label>
+        <Input {...formMethods.register('location')} placeholder="Type a location" />
+        {formMethods.formState.errors.location && (
+          <p className="text-red-600">{formMethods.formState.errors.location.message}</p>
+        )}
+      </div>
+      <div>
+        <label htmlFor="description">Description</label>
+        <Input {...formMethods.register('description')} placeholder="Describe your adventure" />
+        {formMethods.formState.errors.description && (
+          <p className="text-red-600">{formMethods.formState.errors.description.message}</p>
+        )}
+      </div>
+      <Button type="submit">Add New</Button>
+    </form>
   );
 };
 
