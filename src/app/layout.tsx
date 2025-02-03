@@ -6,19 +6,20 @@ import { Inter as FontSans } from 'next/font/google';
 import QueryProvider from '@/providers/QueryProvider';
 import type { Metadata } from 'next';
 import { FC } from 'react';
-import { JSX } from 'react';
+import { ReactNode } from 'react';
 
 const fontSans = FontSans({
   subsets: ['latin'],
   variable: '--font-sans',
 });
 
+// Global metadata for the layout
 export const metadata: Metadata = {
   title: 'Adventure Journal',
-  description: 'Adventure Journal',
+  description: 'Adventure Journal - Document and share your adventures',
 };
 
-const Layout: FC<{ children: React.ReactNode }> = ({ children }): JSX.Element => {
+const Layout: FC<{ children: ReactNode }> = ({ children }): ReactNode => {
   return (
     <html lang="en">
       <body
