@@ -1,13 +1,15 @@
 // src/app/page.tsx
 
-import { JSX } from 'react';
+import { ReactNode } from 'react';
 import AdventuresList from './adventures/_components/AdventureList';
 import Hero from '@/components/ui/Hero';
 import About from '@/components/ui/About';
 import { IAdventurePlain } from '@/models/Adventure';
 import { fetchAdventures } from '@/lib/adventureDbService';
+import { auth } from '@/auth';
 
-const Home = async (): Promise<JSX.Element> => {
+const Home = async (): Promise<ReactNode> => {
+  const session = await auth();
   const adventures: IAdventurePlain[] = await fetchAdventures();
 
   console.log(adventures);
@@ -29,6 +31,8 @@ const Home = async (): Promise<JSX.Element> => {
           This is a simple paragraph that introduces users to the adventure journal application. 
           Here, you can document your adventures, share experiences, and keep track of your journeys.
         </p>
+
+        <p>Welcome {session?.user?.name || 'Guest'}!</p>
       </main>
     </>
   );
