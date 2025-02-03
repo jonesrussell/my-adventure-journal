@@ -1,20 +1,51 @@
 // src/app/signup/page.tsx
 'use client';
 
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { SignupFormValues } from '@/types/SignupFormValues';
+import { signup } from '@/actions/auth';
 
 const SignUpPage: FC = (): ReactNode => {
-  const { register } = useForm<SignupFormValues>();
+  const { register, handleSubmit } = useForm<SignupFormValues>();
+  const [isMounted, setIsMounted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // State for error messages
+
+  useEffect(() => {
+    setIsMounted(true); // Set mounted state to true after the component mounts
+  }, []);
+
+  const onSubmit = async (data: SignupFormValues): Promise<void> => {
+    const formData = new FormData();
+    formData.append('username', data.username);
+    formData.append('email', data.email);
+    formData.append('password', data.password);
+    formData.append('confirmPassword', data.confirmPassword);
+
+    try {
+      await signup(formData);
+      // Handle success (e.g., redirect, show success message)
+      setErrorMessage(null); // Clear any previous error messages
+    } catch (error) {
+      // Set error message based on the error received
+      if (error instanceof Error) {
+        setErrorMessage(error.message); // Display the error message
+      } else {
+        setErrorMessage('An unexpected error occurred. Please try again.'); // Fallback error message
+      }
+    }
+  };
+
+  if (!isMounted) return null; // Prevent rendering until mounted
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
-        <form action="/api/signup" method="POST" className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>} {/* Display error message */}
+        <form onSubmit={handleSubmit(onSubmit)} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">Username</label>
             <Input {...register('username')} placeholder="Type a username" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" autoComplete="username" />

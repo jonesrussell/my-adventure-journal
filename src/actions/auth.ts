@@ -42,9 +42,7 @@ function checkPasswordsMatch(password: string, confirmPassword: string): { succe
  * @param formData - The form data containing user information.
  * @returns A promise that resolves to an object indicating success and a message.
  */
-export async function signup(formData: FormData): Promise<{ success: boolean; message: string; errors?: Record<string, string[]> }> {
-  const errors: Record<string, string[]> = {}; // Initialize errors as an object with arrays
-
+export async function signup(formData: FormData): Promise<void> {
   const rawFormData: SignupFormData = {
     username: String(formData.get('username')),
     email: String(formData.get('email')),
@@ -55,19 +53,13 @@ export async function signup(formData: FormData): Promise<{ success: boolean; me
   // Use validateFormData to validate the signup form fields
   const validationResult = validateFormData(SignupFormSchema, rawFormData);
   if (!validationResult.success) {
-    errors.validation = errors.validation || [];
-    errors.validation.push(validationResult.message);
+    throw new Error(validationResult.message); // Throw an error for validation failure
   }
 
   // Check if passwords match
   const passwordMatchResult = checkPasswordsMatch(rawFormData.password, rawFormData.confirmPassword);
   if (!passwordMatchResult.success) {
-    errors.password = errors.password || [];
-    errors.password.push(passwordMatchResult.message);
-  }
-
-  if (Object.keys(errors).length > 0) {
-    return { success: false, message: 'Validation failed', errors }; // Return errors as arrays
+    throw new Error(passwordMatchResult.message); // Throw an error for password mismatch
   }
 
   // Pass the plain password to createUser
@@ -79,8 +71,7 @@ export async function signup(formData: FormData): Promise<{ success: boolean; me
   };
 
   await createUser(newUser); // Use createUser function from userDbService
-
-  return { success: true, message: 'User created successfully!' };
+  // No return value needed, as the function now returns void
 }
 
 /**
