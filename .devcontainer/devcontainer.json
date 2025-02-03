@@ -29,5 +29,6 @@
 	},
 	"mounts": [
 		"type=bind,source=/home/${localEnv:USER}/.ssh,target=/home/node/.ssh,readonly"
-	]
+	],
+	"forwardPorts": [27017]
 }

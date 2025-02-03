@@ -20,33 +20,28 @@ services:
 
   db:
   
-    image: mongo:7.0.9
+    image: mongodb/mongodb-community-server:latest
+
     restart: unless-stopped
-    command: ["mongod", "--replSet", "rs0"]
+    
+    env_file:
+      - ../.env
 
     volumes:
       - mongodb-data:/data/db
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-      - ./init-replica-set.js:/docker-entrypoint-initdb.d/init-replica-set.js:ro
 
-        #environment:
-        #  - MONGO_INITDB_ROOT_USERNAME=myadmin
-        #  - MONGO_INITDB_ROOT_PASSWORD=foobar123my
-        #  - MONGO_INITDB_DATABASE=myjournal
+    environment:
+      - MONGODB_INITDB_ROOT_USERNAME=${DB_ROOT_USER}
+      - MONGODB_INITDB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MONGODB_INITDB_DATABASE=${DB_NAME}
+
+    ports:
+      - "27017:27017"
 
     # Add "forwardPorts": ["27017"] to **devcontainer.json** to forward MongoDB locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
 
-  mongo-express:
-    image: mongo-express
-    restart: unless-stopped
-    environment:
-      - ME_CONFIG_MONGODB_SERVER=db
-      - ME_CONFIG_MONGODB_PORT=27017
-      - ME_CONFIG_BASICAUTH_USERNAME=mongoExpressUser
-      - ME_CONFIG_BASICAUTH_PASSWORD=mongoExpressPassword
-    ports:
-      - 8081:8081  # Expose Mongo Express on port 8081
-
 volumes:
   mongodb-data:
+    driver: local
