@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { JSX } from 'react';
+import { ReactNode } from 'react';
 
-export const Footer: FC = (): JSX.Element => {
+export const Footer: FC = (): ReactNode => {
   return (
     <footer className="bg-gray-900 text-white py-4">
       <div className="container mx-auto px-4 text-center">
