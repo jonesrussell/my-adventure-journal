@@ -7,11 +7,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { SignupFormValues } from '@/types/SignupFormValues';
 import { signup } from '@/actions/auth';
+import { useRouter } from 'next/navigation'; // Import useRouter for navigation
 
 const SignUpPage: FC = (): ReactNode => {
   const { register, handleSubmit } = useForm<SignupFormValues>();
   const [isMounted, setIsMounted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null); // State for error messages
+  const [successMessage, setSuccessMessage] = useState<string | null>(null); // State for success messages
+  const router = useRouter(); // Initialize the router
 
   useEffect(() => {
     setIsMounted(true); // Set mounted state to true after the component mounts
@@ -26,10 +29,12 @@ const SignUpPage: FC = (): ReactNode => {
 
     try {
       await signup(formData);
-      // Handle success (e.g., redirect, show success message)
       setErrorMessage(null); // Clear any previous error messages
+      setSuccessMessage('Signup successful! Redirecting...'); // Set success message
+      setTimeout(() => {
+        router.push('/'); // Redirect to a welcome page after 2 seconds
+      }, 2000);
     } catch (error) {
-      // Set error message based on the error received
       if (error instanceof Error) {
         setErrorMessage(error.message); // Display the error message
       } else {
@@ -45,6 +50,7 @@ const SignUpPage: FC = (): ReactNode => {
       <div className="w-full max-w-md bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
         {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>} {/* Display error message */}
+        {successMessage && <p className="text-green-500 mb-4">{successMessage}</p>} {/* Display success message */}
         <form onSubmit={handleSubmit(onSubmit)} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">Username</label>
