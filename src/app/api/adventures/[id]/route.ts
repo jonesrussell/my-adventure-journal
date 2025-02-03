@@ -1,9 +1,5 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-import { Adventure } from '@/types/Adventure';
-import { fetchAdventureById } from '@/lib/adventureDbService';
-
-const prisma = new PrismaClient();
+import { fetchAdventureById, createAdventure } from '@/lib/adventureDbService';
 
 export async function GET(request: Request, { params }: { params: { id: string } }): Promise<NextResponse> {
   const { id: _id } = params;
@@ -30,11 +26,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   const { name, location, description } = body;
 
   try {
-    const updatedAdventure = await prisma.adventure.update({
-      where: { id: _id },
-      data: { name, location, description },
-    });
-
+    const updatedAdventure = await createAdventure({ name, location, description });
     return NextResponse.json(updatedAdventure);
   } catch (error) {
     console.error('Error updating adventure:', error);
@@ -46,9 +38,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
   const { id: _id } = params;
 
   try {
-    await prisma.adventure.delete({
-      where: { id: _id },
-    });
+    await createAdventure({ name: '', location: '', description: '' });
     return NextResponse.json({}, { status: 204 });
   } catch (error) {
     console.error('Error deleting adventure:', error);
@@ -57,9 +47,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
 }
 
 export async function getAdventureById(id: string): Promise<Adventure> {
-  const adventure = await prisma.adventure.findUnique({
-    where: { id },
-  });
+  const adventure = await fetchAdventureById(id);
 
   if (!adventure) {
     throw new Error('Adventure not found');
