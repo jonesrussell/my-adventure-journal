@@ -1,14 +1,16 @@
 import Link from 'next/link';
-import { ReactNode } from 'react';
+import { FC } from 'react';
+
+interface NavBarProps {
+  isLoggedIn: boolean; // Prop to determine if the user is logged in
+}
 
 const navItems = [
   { href: '/about', label: 'About' },
   { href: '/adventures', label: 'Adventures' },
-  { href: '/signin', label: 'Login' },
-  { href: '/signup', label: 'Signup' },
 ];
 
-export const NavBar = (): ReactNode => {
+export const NavBar: FC<NavBarProps> = ({ isLoggedIn }) => {
   return (
     <nav className="space-x-4">
       {navItems.map((item) => (
@@ -16,6 +18,14 @@ export const NavBar = (): ReactNode => {
           {item.label}
         </Link>
       ))}
+      {isLoggedIn ? (
+        <Link href="/logout" className="text-gray-800 hover:text-blue-500">Logout</Link>
+      ) : (
+        <>
+          <Link href="/signin" className="text-gray-800 hover:text-blue-500">Login</Link>
+          <Link href="/signup" className="text-gray-800 hover:text-blue-500">Signup</Link>
+        </>
+      )}
     </nav>
   );
 };

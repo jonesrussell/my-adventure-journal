@@ -65,4 +65,4 @@ const authOptions: NextAuthConfig = {
 };
 
 export const { handlers, auth } = NextAuth(authOptions);
-export default auth; 
+export default auth;
