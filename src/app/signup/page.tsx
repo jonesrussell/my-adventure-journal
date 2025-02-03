@@ -46,7 +46,7 @@ const SignUpPage: FC = (): ReactNode => {
   if (!isMounted) return null; // Prevent rendering until mounted
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center bg-gray-100">
       <div className="w-full max-w-md bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
         {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>} {/* Display error message */}

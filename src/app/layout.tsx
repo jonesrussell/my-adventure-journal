@@ -24,13 +24,13 @@ const Layout: FC<{ children: ReactNode }> = ({ children }): ReactNode => {
     <html lang="en">
       <body
         className={cn(
-          'min-h-screen bg-background font-sans antialiased',
+          'min-h-screen flex flex-col bg-background font-sans antialiased',
           fontSans.variable,
         )}
       >
         <Header />
         <QueryProvider>
-          <div className="min-h-screen bg-gray-100 grid grid-rows-[auto,1fr,auto]">
+          <div className="flex-grow bg-gray-100">
             <main className="container mx-auto px-4 py-8">
               {children}
             </main>
