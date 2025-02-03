@@ -1,4 +1,11 @@
 import { FC } from 'react';
+import type { Metadata } from 'next';
+
+// Page-specific metadata
+export const metadata: Metadata = {
+  title: 'About Us - Adventure Journal',
+  description: 'Learn more about our adventure journal and our mission.',
+};
 
 const AboutPage: FC = () => {
   return (
