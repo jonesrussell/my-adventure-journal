@@ -3,8 +3,9 @@
 
 import { createUser, getUser } from '@/lib/userDbService'; // Ensure this path is correct
 import { comparePasswords } from '@/utils/passwordUtils'; // Ensure this path is correct
+import { hashPassword } from '@/utils/passwordUtils'; // Import a function to hash passwords
 import { ZodSchema } from 'zod'; // Import ZodSchema
-import { SignupFormSchema, SignInFormSchema } from '@/lib/definitions'; // Remove if not used
+import { SignupFormSchema, SignInFormSchema } from '@/lib/definitions'; // Ensure this path is correct
 
 // Define an interface for the sign-in form data
 interface SignInFormData {
@@ -62,16 +63,20 @@ export async function signup(formData: FormData): Promise<void> {
     throw new Error(passwordMatchResult.message); // Throw an error for password mismatch
   }
 
-  // Pass the plain password to createUser
+  // Hash the password before storing
+  const hashedPassword = await hashPassword(rawFormData.password);
+
+  // Create the new user object
   const newUser = {
+    id: 'generated-id', // Generate or assign a unique ID here
     username: rawFormData.username,
     email: rawFormData.email,
-    password: rawFormData.password, // Pass the plain password
+    hashedPassword: hashedPassword, // Store the hashed password
+    password: rawFormData.password, // Optional, if you want to keep the plain password for comparison
     name: rawFormData.username, // Assuming name is required in your schema
   };
 
   await createUser(newUser); // Use createUser function from userDbService
-  // No return value needed, as the function now returns void
 }
 
 /**
