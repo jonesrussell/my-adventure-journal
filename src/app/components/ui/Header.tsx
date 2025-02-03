@@ -1,8 +1,8 @@
 import { NavBar } from '@/components/ui/NavBar';
 import Link from 'next/link';
-import { JSX } from 'react';
+import { ReactNode } from 'react';
 
-export const Header = (): JSX.Element => {
+export const Header = (): ReactNode => {
   return (
     <header className="bg-white shadow">
       <div className="container mx-auto px-4 py-2 flex justify-between items-center">
