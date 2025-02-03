@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { JSX } from 'react';
+import { ReactNode } from 'react';
 
 const navItems = [
   { href: '/about', label: 'About' },
@@ -8,7 +8,7 @@ const navItems = [
   { href: '/signup', label: 'Signup' },
 ];
 
-export const NavBar = (): JSX.Element => {
+export const NavBar = (): ReactNode => {
   return (
     <nav className="space-x-4">
       {navItems.map((item) => (
