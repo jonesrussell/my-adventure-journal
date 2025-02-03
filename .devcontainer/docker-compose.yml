@@ -37,5 +37,16 @@ services:
     # Add "forwardPorts": ["27017"] to **devcontainer.json** to forward MongoDB locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
 
+  mongo-express:
+    image: mongo-express
+    restart: unless-stopped
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=db
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_BASICAUTH_USERNAME=mongoExpressUser
+      - ME_CONFIG_BASICAUTH_PASSWORD=mongoExpressPassword
+    ports:
+      - 8081:8081  # Expose Mongo Express on port 8081
+
 volumes:
   mongodb-data:

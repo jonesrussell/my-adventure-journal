@@ -23,6 +23,12 @@ db.createUser({
   ]
 });
 
+db.createUser({
+  user: 'mongoExpressUser',
+  pwd: 'mongoExpressPassword',
+  roles: [{ role: 'readWrite', db: 'myjournal' }]
+});
+
 db.createCollection('adventures');
 db.adventures.insertMany([
   {
